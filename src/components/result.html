@@ -1,0 +1,1734 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-90429556-4"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-90429556-4');
+	</script>
+
+	<meta charset="utf-8" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="-1" />
+	<meta name="viewport"
+		content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+	<meta name="format-detection" content="telephone=no" />
+	<title>커리어넷</title>
+	<!-- 공통으로 쓰이는 js -->
+	<script src="/inspct/js/common/core.js"></script>
+	<script src="/inspct/js/common/string.min.js"></script>
+	<script src="/inspct/js/common/utils.js"></script>
+	<script src="/inspct/js/common/axios.js"></script>
+	<script src="/inspct/js/common/vue.js"></script>
+	<script src="/inspct/js/common/vue-async-computed.js"></script>
+	<script src="/inspct/web/js/share.js"></script>
+	<script src="/inspct/js/momentjs/moment.min.js"></script>
+	<script src="/inspct/js/momentjs/moment-with-locales.min.js"></script>
+	<script src="/inspct/js/momentjs/moment-range.min.js"></script>
+	<script src="/inspct/web//js/swal/sweetalert2.js?v=1"></script>
+	<script src="/inspct/js/videojs/ie8/videojs-ie8.min.js"></script>
+	<script src="/inspct/js/videojs/video.js"></script>
+	<script src="/inspct/js/validator.js"></script>
+	<script src="/inspct/js/flatpickr/flatpickr.min.js"></script>
+	<script src="/inspct/js/flatpickr/ko.js"></script>
+	<script src="/inspct/js/velocity.min.js"></script>
+	<script src="/inspct/js/js.cookie-2.2.0.min.js"></script>
+	<script src="/inspct/js/Chart.min.js"></script>
+	<script src="/inspct/js/chartjs-plugin-datalabels.js"></script>
+	<script src="/inspct/js/html2canvas.min.js"></script>
+	<script src="/inspct/js/jspdf.min.js"></script>
+	<script src="/inspct/js/common/string.min.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="/inspct/css/junior_psycho.css" />
+	<script type="text/JavaScript" src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+	<!-- 기기 분기처리 스크립트 -->
+	<script type="text/javascript">
+		/*<![CDATA[*/
+        try {
+            Kakao.init("00465458d173a4d3c0430eea5c19e52c");      // 사용할 앱의 JavaScript 키를 설정
+        } catch(e) {
+            console.log('Failed to load Kakao SDK');
+        }
+
+        window.myredirecturl = 'https://www.career.go.kr';
+        window['moment-range'].extendMoment(moment);
+        window.myColors = ["#f783ac","#ffa94d","#ffd43b","#69db7c","#4dabf7","#9775fa","##da77f2","#ff8787","#ced4da"];
+        var doc = document.documentElement;
+        doc.setAttribute('data-useragent', navigator.userAgent);
+        var sAgent = navigator.userAgent;
+        if (sAgent.indexOf("WebKit") < 0) {window.onerror = function () {return true;}}
+
+        var contextRoot = "\/inspct\/";
+        axios.defaults.baseURL = contextRoot;
+        axios.defaults.headers.get['Pragma'] = 'no-cache';
+        axios.defaults.headers.get['Cache-Control'] = 'no-cache, no-store';
+
+        function combineURLs(baseURL, relativeURL) {
+            return relativeURL
+                    ? baseURL.replace(/\/+$/, '') + '/' + relativeURL.replace(/^\/+/, '')
+                    : baseURL;
+        };
+
+        var jrUrl = 'http://www.career.go.kr/jr';
+        if(location.href.indexOf('local') > -1 || location.href.indexOf('stg') > -1) {
+            jrUrl = 'http://stg-cnet.career.go.kr/jr';
+        }
+
+        if (!Array.prototype.indexOf) {
+            Array.prototype.indexOf = function (obj, fromIndex) {
+                if (fromIndex == null) {
+                    fromIndex = 0;
+                } else if (fromIndex < 0) {
+                    fromIndex = Math.max(0, this.length + fromIndex);
+                }
+                for (var i = fromIndex, j = this.length; i < j; i++) {
+                    if (this[i] === obj)
+                        return i;
+                }
+                return -1;
+            };
+        }
+        if (!Array.prototype.contains) {
+            Array.prototype.contains = function(elem)
+            {
+                for (var i in this)
+                {
+                    if (this[i] == elem) return true;
+                }
+                return false;
+            }
+        }
+        if (!Array.prototype.clean) {
+            Array.prototype.clean = function (deleteValue) {
+                for (var i = 0; i < this.length; i++) {
+                    if (this[i] == deleteValue) {
+                        this.splice(i, 1);
+                        i--;
+                    }
+                }
+                return this;
+            };
+        }
+        var CAREERNET_URL = 'https://www.career.go.kr';
+        //if(window.location.href.indexOf('211') > 0) CAREERNET_URL = 'http://stg-cnet.career.go.kr';
+        function clone(obj) {
+            if (obj === null || typeof(obj) !== 'object')
+                return obj;
+            var copy = obj.constructor();
+            for (var attr in obj) {
+                if (obj.hasOwnProperty(attr)) {
+                    copy[attr] = clone(obj[attr]);
+                }
+            }
+            return copy;
+        }
+        function isBlank(str) {
+            if(str == null || str == '' || str.length < 1) return true;
+            return false;
+        }
+        function isNumeric(num, opt){
+            num = String(num).replace(/^\s+|\s+$/g, "");
+            if(typeof opt == "undefined" || opt == "1"){
+                var regex = /^[+\-]?(([1-9][0-9]{0,2}(,[0-9]{3})*)|[0-9]+){1}(\.[0-9]+)?$/g;
+            }else if(opt == "2"){
+                var regex = /^(([1-9][0-9]{0,2}(,[0-9]{3})*)|[0-9]+){1}(\.[0-9]+)?$/g;
+            }else if(opt == "3"){
+                var regex = /^[0-9]+(\.[0-9]+)?$/g;
+            }else{
+                var regex = /^[0-9]$/g;
+            }
+            if( regex.test(num) ){
+                num = num.replace(/,/g, "");
+                return isNaN(num) ? false : true;
+            }else{ return false;  }
+        }
+        function removeTag(text) {
+            return text.replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, "");
+        }
+        function mergeVerticalCell(table, startRowIdx, cellIdx) {
+            var rows = table.getElementsByTagName("tr"), numRows = rows.length, numRowSpan = 1;
+            var currentRow = null,currentCell = null,currentCellData = null,nextRow = null, nextCell = null, nextCellData = null;
+
+            for (var i = startRowIdx; i < (numRows-1); i++) {
+                if (numRowSpan <= 1) {
+                    currentRow      = table.getElementsByTagName('tr')[i];
+                    currentCell     = currentRow.getElementsByTagName('td')[cellIdx];
+                    currentCellData = currentCell.childNodes[0].data;
+                }
+                if (i < numRows-1) {
+                    if (table.getElementsByTagName('tr')[i+1]) {
+                        nextRow       = table.getElementsByTagName('tr')[i+1];
+                        nextCell      = nextRow.getElementsByTagName('td')[cellIdx];
+                        if(nextCell.childNodes[0] != null){
+                            nextCellData  = nextCell.childNodes[0].data;
+                            if (currentCellData == nextCellData) {
+                                numRowSpan              += 1;
+                                currentCell.rowSpan     = numRowSpan;
+                                nextCell.style.display  = 'none';
+                            } else {
+                                numRowSpan = 1;
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        function computedStyleToInlineStyle(element, options) {
+            if (!element) {
+                throw new Error("No element specified.");
+            }
+            if (!options) {
+                options = {};
+            }
+
+            if (options.recursive) {
+                Array.prototype.forEach.call(element.children, function(child) {
+                    computedStyleToInlineStyle(child, options);
+                });
+            }
+
+            var computedStyle = getComputedStyle(element);
+            for (var i = 0; i < computedStyle.length; i++) {
+                var property = computedStyle.item(i);
+                if (!options.properties || options.properties.indexOf(property) >= 0) {
+                    var value = computedStyle.getPropertyValue(property);
+                    element.style[property] = value;
+                }
+            }
+        }
+        function elementalscrollTop(qryString) {
+            document.querySelector(qryString).scrollTop = 0;
+        }
+        function fn_actreg(mbrNo,testNm){
+            if(mbrNo != null && mbrNo != '' && /^20[0-9]{8}$/.test(mbrNo)) {
+                var mbrUniqueSn = mbrNo.substr(2);
+                axios.post('/api/common/actlog',{mberUniqueSn:mbrUniqueSn,testNm:testNm}).then(function (response) {
+                    console.log(response.data);
+                });
+            }
+        }
+        window.readyHandlers = [];
+        window.ready = function ready(handler) {
+            window.readyHandlers.push(handler);
+            handleState();
+        };
+        window.handleState = function handleState () {
+            if (['interactive', 'complete'].indexOf(document.readyState) > -1) {
+                while(window.readyHandlers.length > 0) {
+                    (window.readyHandlers.shift())();
+                }
+            }
+        };
+        document.onreadystatechange = window.handleState;
+
+        var urlParams;
+        (window.onpopstate = function () {
+            var match, pl     = /\+/g, search = /([^&=]+)=?([^&]*)/g, decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); }, query  = window.location.search.substring(1);
+            urlParams = {};
+            while (match = search.exec(query)) urlParams[decode(match[1])] = decode(match[2]);
+        })();
+        //
+        Vue.use(AsyncComputed);
+        Vue.prototype.$http = axios;
+        // <q-radio id="" name="" value="" text="" value="" ></q-radio>
+        Vue.component('qRadio', {
+            template :'<span class="item_radio"><input type="radio" class="blind" :id="id" :value="val" :name="name" v-model="proxyValue"><label :for="id" class="lab_radio"><span class="ico_common"></span>{{ text }}</label></span>',
+            props: ['id','name','value', 'val','text'],
+            computed: {
+                proxyValue: {
+                    get:function() {
+                        return this.value;
+                    },
+                    set:function(newValue) {
+                        this.$emit('input', newValue);
+                    }
+                }
+            }
+        });
+        // <q-gender v-bind:gender.sync="userChoice">
+        Vue.component('qGender', {
+            template :'<dd><q-radio v-for="opt in options" :class="{check_on: gender == opt}" :key="opt.value" :id="opt.value" name="gender" :text="opt.text" :val="opt.value" v-model="proxyAnswer"></q-radio></dd>',
+            data: function(){
+                return {options : [{text:"남자",value:"100323"},{text:"여자",value:"100324"}]};
+            },
+            props: {
+                gender: String
+            },
+            computed: {
+                proxyAnswer: {
+                    get:function() {
+                        return this.gender;
+                    },
+                    set:function(newValue) {
+                        this.$emit('update:gender', newValue);
+                    }
+                }
+            }
+        });
+        // <q-radios v-bind:options="[{value:1,test:1}]" name="name" v-bind:selected.sync="userChoice">
+        Vue.component('q-radios', {
+            template :'<dd><span class="item_radio" v-for="opt in options"><input type="radio" class="blind" :id="getId(opt)" :value="opt.value" :name="name" v-model="proxyAnswer"><label :for="getId(opt)" class="lab_radio"><span class="ico_common"></span>{{ opt.text }}</label></span></dd>'
+            ,props: {
+                selected: String
+                , options: Array
+                , name: String
+            }
+            ,methods:{
+                getId:function (opt) {
+                    return 'id' + opt.value;
+                }
+            }
+            ,computed: {
+                proxyAnswer: {
+                    get:function() {
+                        return this.selected;
+                    },
+                    set:function(newValue) {
+                        this.$emit('update:selected', newValue);
+                    }
+                }
+            }
+        });
+        /*<q-email v-bind:email.sync="email"></q-email>*/
+        Vue.component('qEmail', {
+            template :'<dd class="desc_email"><span class="hidden">{{hval}}</span><div class="common_ipt_wrap item_email" style="width:100px;"><label for="inpEmail">메일계정 입력</label><input type="text" id="inpEmail" class="ipt_txt_comm" v-model="emailId" v-on:change="setEmailId()"/></div>' +
+                    '<div class="common_ipt_wrap type_dropmenu" :class="{on:isOpen}"  v-on:click="toggleDomain($event)" ><span class="hidden">메일 도메인 선택상자</span><span class="hidden">선택내용 : {{domain}} </span>' +
+                    '<label for="inpDomain">메일계정 입력</label><input type="text" id="inpDomain" class="ipt_txt_comm" style="height: 43px;padding: 0 6px 0 10px;line-height: 43px;font-size: 18px;border: none;" v-model="tempdomain" v-on:change="chgDomain($event)" v-bind:readonly="!isDirect"/><span class="hidden">선택옵션</span>' +
+                    '<div class="box_select" style="width:160px;left:0px;"><ul class="list_select" style="height:220px;overflow: auto;"><li v-for="opt in domains"><a href="javascript:void(0)" class="link_opt" v-on:click="setDomain(opt,$event)">{{opt}}</a></li></ul>' +
+                '</div></div></dd>'
+            ,data: function () {
+                return {
+                    domains:['naver.com','hanmail.net','nate.com','gmail.com','hotmail.com','chol.com','dreamwiz.com','empal.com','lycos.co.kr','netian.com','직접입력']
+                    ,isOpen: false
+                    ,isDirect: false
+                    ,emailId: ''
+                    ,domain: ''
+                    ,tempdomain:''
+                };
+            }
+            ,props: {
+                email: String
+            }
+            , methods:{
+                setDomain:function(v,event) {
+                    if(v == '직접입력') {
+                        this.isDirect = true;
+                        this.tempdomain = '';
+                        document.getElementById("inpDomain").focus();
+                    } else {
+                        this.isDirect = false;
+                        this.tempdomain = v;
+                    }
+                    this.domain = this.tempdomain;
+                    this.proxyAnswer = this.emailId + "@" + this.domain;
+                    if (event) event.preventDefault();
+                }
+                ,chgDomain:function (event) {
+                    this.domain = this.tempdomain;
+                    this.proxyAnswer = this.emailId + "@" + this.domain;
+                    if (event) event.preventDefault();
+                }
+                ,toggleDomain:function (event) {
+                    this.isOpen = !this.isOpen;
+                    if (event) event.preventDefault();
+                }
+                ,setEmailId:function(){
+                    this.proxyAnswer = this.emailId + "@" + this.domain;
+                }
+            }
+            ,computed: {
+                proxyAnswer: {
+                    get:function() {
+                        return this.emailId + "@" + this.domain;
+                    },
+                    set:function(newValue) {
+                        this.$emit('update:email', newValue);
+                    }
+                }
+                ,hval : {
+                    get:function() {
+                        if(this.email != null && this.email != ""){
+                            this.emailId = this.email.substring(0,this.email.indexOf("@"));
+                            this.domain = this.email.substring(this.email.indexOf("@") +1 );
+
+                            this.tempdomain = this.domain;
+                        }
+                        return this.email;
+                    },
+                    set:function(newvalue) {
+
+                    }
+                }
+            }
+        });
+        /* <q-select v-bind:options="" v-bind:selected.sync=""></q-select>  */
+        Vue.component('qSelect', {
+            template :'<div class="common_ipt_wrap type_dropmenu" :class="{on : isOpen}"><span class="hidden">{{hval}}</span><a href="javascript:void(0)" class="link_selected" v-on:click="toggle()">{{ select == null ? placeholder :  select.text }}<span class="ico_common ico_arrow" ></span></a> <span class="hidden">선택옵션</span> <div class="box_select" style="background: #fff;max-height: 131px;overflow-y: auto;"><ul class="list_select"><li v-for="opt in options"><a href="javascript:void(0)" class="link_opt" v-on:click="setvalue(opt)">{{opt.text}}</a></li></ul></div></div>'
+            ,data: function () {
+                return {
+                    isOpen: false
+                    ,select:null
+                };
+            }
+            ,props: {
+                options: Array,
+                placeholder: String,
+                selected: String
+            }
+            , methods:{
+                toggle : function(){
+                    this.isOpen = !this.isOpen;
+                },
+                setvalue:function(opt){
+                    this.isOpen = false;
+                    this.select = opt;
+                    this.proxyAnswer = opt.value;
+                }
+            }
+            ,computed: {
+                proxyAnswer: {
+                    get:function() {
+                        return this.select.value;
+                    },
+                    set:function(newValue) {
+                        this.$emit('update:selected', newValue);
+                    }
+                }
+                , hval: {
+                    get:function() {
+                        for(var i = 0;i < this.options.length ;i++) {
+                            if(this.options[i].value == this.selected) {
+                                this.select = this.options[i];
+                                break;
+                            }
+                        }
+                        return this.selected;
+                    },
+                    set:function(newvalue){
+                    }
+                }
+            }
+        });
+        Vue.component('qSelect2', {
+            template :'<div class="common_ipt_wrap type_dropmenu" :class="{on : isOpen}"><span class="hidden">{{hval}}</span><a href="javascript:void(0)" class="link_selected" v-on:click="toggle()">{{ select == null ? placeholder :  select.text }}<span class="ico_common ico_arrow" ></span></a> <span class="hidden">선택옵션</span> <div class="box_select"><ul class="list_select" style="height: 225px;overflow-y: auto;"><li v-for="opt in options"><a href="javascript:void(0)" class="link_opt" v-on:click="setvalue(opt)">{{opt.text}}</a></li></ul></div></div>'
+            ,data: function () {
+                return {
+                    isOpen: false
+                    ,select: null
+                };
+            }
+            ,props: {
+                options: Array,
+                placeholder: String,
+                selected: String
+            }
+            , methods:{
+                toggle : function(){
+                    this.isOpen = !this.isOpen;
+                },
+                setvalue:function(opt){
+                    this.isOpen = false;
+                    this.select = opt;
+                    this.proxyAnswer = opt.value;
+                }
+            }
+            ,computed: {
+                proxyAnswer: {
+                    get:function() {
+                        return this.select.value;
+                    },
+                    set:function(newValue) {
+                        this.$emit('update:selected', newValue);
+                    }
+                }
+                , hval: {
+                    get:function() {
+                        for(var i = 0;i < this.options.length ;i++) {
+                            if(this.options[i].value == this.selected) {
+                                this.select = this.options[i];
+                                break;
+                            }
+                        }
+                        return this.selected;
+                    },
+                    set:function(newvalue){
+                    }
+                }
+            }
+        });
+        Vue.component('qSchools',{
+            template : '<div class="common_wrap_layer" tabindex="0" v-bind:class="{layer_on:ispopup}"><span class="bg_deemed"></span><div class="inner_layer"><div class="common_layer_set"><div class="layer_head"><strong class="hidden">학교 및 지역 선택</strong><button type="button" class="btn_close" v-on:click="ispopup = !ispopup"><span class="ico_common">닫기</span></button></div><div class="layer_body"><table class="common_tbl"><caption><span class="hidden">학교 및 지역 작성표</span></caption><colgroup><col width="165"/></colgroup><tbody><tr><th scope="row">학교 및 지역 선택</th><td><q-select v-bind:options="schooltypes" v-bind:selected.sync="schooltype" ></q-select></td><td><q-select v-bind:options="areas" v-bind:selected.sync="area" ></q-select></td></tr><tr><th scope="row">학교명</th><td colspan="2"><label for="inpSchool" class="hidden">학교명 입력</label><div class="common_ipt_wrap"><input type="text" id="inpSchool" class="ipt_txt_comm" v-model="selectedschool" /></div></td></tr></tbody></table><div class="item_search"><button type="button" class="btn_search" v-on:click="fn_school_search()">검색</button></div><div style="overflow: hidden; overflow-y: auto; max-height:550px;"><table class="common_tbl"><caption><span class="hidden">지역 및 학교 선택표</span></caption><colgroup><col width="87" /></colgroup><thead><tr><th scope="col">선택</th><th scope="col">지역</th><th scope="col">학교명</th></tr></thead><div><tbody class="type_txt_center"><tr v-for="item in schools"><td><span class="common_itme_raido"><input v-bind:id="\'sr\'+item.seq" type="radio" name="schoolradio"  class="blind" v-bind:value="item.schulNm" v-model="school"/><label v-bind:for="\'sr\'+item.seq" class="lab_common"><span class="ico_common">{{ item.schulNm }}선택</span></label></span></td><td>{{ item.areaNm }}</td><td>{{ item.schulNm }}</td></tr></tbody></div></table></div><div class="common_btn_wrap" style="text-align:center"><span class="inner_btn" ><button role="button"  class="btn_comm btn_active" style="min-width:198px;display:inline-block;" v-if="totalschoolcnt > schools.length" v-on:click="fn_school_more()">더보기</button></span></div></div><div class="layer_foot"><div class="common_btn_wrap"><span class="inner_btn"><a href="javascript:void(0)" role="button" class="btn_comm btn_active" v-on:click="fn_school_ok()">확인</a></span><span class="inner_btn"><a href="javascript:void(0)" role="button" class="btn_comm" v-on:click="ispopup = !ispopup">닫기</a></span></div></div></div></div></div>'
+            ,data: function () {
+                return {
+                    isOpen: false
+                    , schooltypes: [{text:'중학교',value:'midschool'},{text:'고등학교',value:'highschool'}]
+                    , schooltype:'midschool'
+                    , areas:[{"text":"서울특별시","value":"100260"},{"text":"부산광역시","value":"100267"},{"text":"인천광역시","value":"100269"},{"text":"대구광역시","value":"100272"},{"text":"광주광역시","value":"100275"},{"text":"대전광역시","value":"100271"},{"text":"울산광역시","value":"100273"},{"text":"세종특별자치시","value":"100704"},{"text":"경기도","value":"100276"},{"text":"강원도","value":"100278"},{"text":"충청남도","value":"100281"},{"text":"충청북도","value":"100280"},{"text":"경상북도","value":"100285"},{"text":"경상남도","value":"100291"},{"text":"전라북도","value":"100282"},{"text":"전라남도","value":"100283"},{"text":"제주특별자치도","value":"100292"},{"text":"해외거주","value":"100771"}]
+                    , area:''
+                    , search:''
+                    , schools :[]
+                    , totalschoolcnt : 0
+                    , schoolpage : 0
+                    , selectedschool:''
+                };
+            }
+            ,props: {
+                school: String
+                , ispopup: Boolean
+            }
+            , methods:{
+                fn_school_ok:function(){
+
+                }
+                ,fn_school_search:function(){
+                    this.schoolpage = 0;
+                    this.$http.post("/api/code/"+ this.schooltype ,{page: this.schoolpage, areaCd: this.area, name: this.search}).then(function(response){
+                        this.schools = response.data.content;
+                        this.totalschoolcnt = response.data.totalElements;
+                    });
+                }
+                ,fn_school_more:function(){
+                    this.schoolpage += 1;
+                    axios.post("/api/code/"+ this.schooltype ,{page: this.schoolpage,areaCd: this.area ,name: this.search}).then(function(response){
+                        app.schools = app.schools.concat(response.data.content);
+                        app.totalschoolcnt = response.data.totalElements;
+                    });
+                }
+            }
+            ,computed: {
+                proxyAnswer: {
+                    get:function() {
+                        return this.select.value;
+                    },
+                    set:function(newValue) {
+                        this.$emit('update:selected', newValue);
+                    }
+                }
+            }
+        });
+        Vue.component('qSelect3', {
+            template :'<div class="common_ipt_wrap type_dropmenu" :class="{on : isOpen}"><a href="javascript:void(0)" class="link_selected" v-on:click="toggle()">{{ select.text == "" ? placeholder :  select.text }}<span class="ico_common ico_arrow" ></span></a> <span class="hidden">선택옵션</span> <div class="box_select" style="top: 43px;background: #fff;max-height: 131px;overflow-y: auto;"><ul class="list_select"><li v-for="opt in options"><a href="javascript:void(0)" class="link_opt" v-on:click="setvalue(opt)">{{opt.text}}</a></li></ul></div></div>'
+            ,data: function () {
+                return {
+                    isOpen: false
+                };
+            }
+            ,props: {
+                options: Array,
+                placeholder: String,
+                selected: [String, Number]
+            }
+            , methods:{
+                toggle : function(){
+                    this.isOpen = !this.isOpen;
+                },
+                setvalue:function(opt){
+                    this.isOpen = false;
+                    this.proxyAnswer = opt.value;
+                }
+            }
+            ,computed: {
+                select: {
+                    get : function () {
+                        for(var i = 0;i < this.options.length ;i++) {
+                            if(this.options[i].value == this.selected) {
+                                return this.options[i];
+                            }
+                        }
+                        return {text:'',value:null};
+                    }
+                }
+                ,proxyAnswer: {
+                    get:function() {
+                        return this.select.value;
+                    },
+                    set:function(newValue) {
+                        this.$emit('update:selected', newValue);
+                    }
+                }
+            }
+        });
+        /*]]>*/
+	</script>
+
+	<link rel="stylesheet" type="text/css" href="/inspct/web/css/base.css" />
+	<link rel="stylesheet" type="text/css" href="/inspct/web/css/common.css" />
+	<link rel="stylesheet" type="text/css" href="/inspct/web/css/content.css" />
+	<link rel="stylesheet" type="text/css" href="/inspct/web/css/common-merge.css">
+	<link rel="stylesheet" type="text/css" href="/inspct/web/js/swal/sweetalert2.css" />
+	<link rel="stylesheet" type="text/css" href="/inspct/js/videojs/video-js.css" />
+	<link rel="stylesheet" type="text/css" href="/inspct/js/flatpickr/flatpickr.min.css" />
+	<link rel="stylesheet" type="text/css" href="/inspct/js/common/vue2-animate.min.css" />
+	<style>
+		#ct {
+			outline: none;
+		}
+	</style>
+
+	<link rel="stylesheet" type="text/css" href="/inspct/web/css/css-loader.css" />
+	<style>
+		#ct {
+			background-color: white;
+		}
+	</style>
+
+
+</head>
+
+<body class="print-body">
+	<div id="wrap" v-cloak="">
+		<div class="header_common_test printhide header_dev_indigo" v-show="!isPopup">
+			<div class="test_inner_header">
+				<h1 class="tit_logo">
+					<a href="//www.career.go.kr/cnet/front/main/main.do" class="link_logo">
+						<span class="ico_common">진로정보망 커리어넷</span>
+					</a>
+				</h1>
+				<div id="gnb" class="gnb_test">
+					<strong class="hidden">커리어넷 메뉴</strong>
+					<div class="item_menu" v-bind:class="{gnb_on:isMenu}" v-on:click="fn_menu_close()">
+						<!-- [개발]메뉴 펼침시 클래스 'gnb_on' 추가 -->
+						<a href="javascript:void(0)" class="btn_gnb" v-on:click="isMenu = !isMenu">
+							<span class="ico_common">메뉴 펼침/닫기 토글</span>
+						</a>
+						<ul class="list_gnb">
+							<!-- [개발]활성화 메뉴 클래스 'on' 추가 -->
+							<li onmouseenter="menuHoverClass(this)" onmouseleave="menuHoverClass(this)">
+								<a href="//www.career.go.kr/cnet/front/main/main.do" class="link_gnb">커리어넷 홈</a>
+							</li>
+							<li onmouseenter="menuHoverClass(this)" onmouseleave="menuHoverClass(this)">
+								<a href="//www.career.go.kr/cnet/front/examen/examenMain.do" class="link_gnb">진로심리검사</a>
+							</li>
+							<li onmouseenter="menuHoverClass(this)" onmouseleave="menuHoverClass(this)">
+								<a href="//www.career.go.kr/cnet/front/counsel/counselMain.do" class="link_gnb">진로상담</a>
+							</li>
+							<li onmouseenter="menuHoverClass(this)" onmouseleave="menuHoverClass(this)">
+								<a href="//www.career.go.kr/cnet/front/base/base/newJobMain.do"
+									class="link_gnb">직업정보</a>
+							</li>
+							<li onmouseenter="menuHoverClass(this)" onmouseleave="menuHoverClass(this)">
+								<a href="//www.career.go.kr/cnet/front/base/base/newMajorMain.do"
+									class="link_gnb">학과정보</a>
+							</li>
+							<li onmouseenter="menuHoverClass(this)" onmouseleave="menuHoverClass(this)">
+								<a href="//www.career.go.kr/cnet/front/web/webMain.do" class="link_gnb">진로동영상</a>
+							</li>
+							<li onmouseenter="menuHoverClass(this)" onmouseleave="menuHoverClass(this)">
+								<a href="//www.career.go.kr/cnet/front/web/courseLeading/courseMain.do"
+									class="link_gnb">진로교육자료</a>
+							</li>
+							<!--<li onmouseenter="menuHoverClass(this)" onmouseleave="menuHoverClass(this)">
+                    <a href="//www.career.go.kr/cnet/front/commbbs/notice/commBbsList.do" class="link_gnb">알림마당</a>
+                </li>-->
+						</ul>
+					</div>
+
+				</div>
+				<h2 class="tit_cont">
+					<span class="txt_tit">{{ testNm }}</span>
+				</h2>
+				<div v-if="aroNo != null &amp;&amp; aroNo != '' &amp;&amp; !isPopup" class="btn_tempsave2">
+					<a v-on:click="go_otherinspct()" class="btn-round-head ico_another">다른검사 확인하기</a>
+				</div>
+				<div class="item_share" style="float: right;">
+					<strong class="hidden">검사 결과 메뉴</strong>
+					<ul class="list_item">
+						<li>
+							<a href="javascript:window.print()" class="btn_item" title="인쇄">
+								<span class="ico_common ico_print">인쇄</span>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:void(0)" class="btn_item" title="검사결과 다운로드">
+								<span class="ico_common ico_down" v-on:click="fn_download()">검사결과 다운로드</span>
+							</a>
+						</li>
+						<li v-bind:class="{on: isEmail}">
+							<!-- [개발]메일발송 레이어 활성화시 클래스 'on' 추가 -->
+							<a href="javascript:void(0)" class="btn_item" v-on:click="fn_menu_close('isEmail')"
+								title="이메일 보내기">
+								<span class="ico_common ico_mail">메일발송</span>
+							</a>
+							<div class="layer_mail">
+								<div class="common_active_layer">
+									<div class="layer_head head_type_line">
+										<strong class="tit_layer">메일발송</strong>
+									</div>
+									<div class="layer_body">
+										<table class="common_tbl">
+											<caption>
+												<span class="hidden">메일 발송을 위한 작성표</span>
+											</caption>
+											<colgroup>
+												<col width="132" />
+											</colgroup>
+											<tbody>
+												<tr>
+													<th scope="row">이메일 제목</th>
+													<td>[커리어넷]{{ get_name() }}님의 {{ testNm }} 결과입니다.</td>
+												</tr>
+												<tr>
+													<th scope="row">이메일 주소</th>
+													<td>
+														<label for="inpEmail" class="hidden">이메일 주소 입력</label>
+														<div class="common_ipt_wrap">
+															<input type="text" id="inpEmail" class="ipt_txt_comm" placeholder="이메일 주소 입력" v-model="user.email"/>
+                                        </div>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+									<div class="layer_foot">
+										<div class="common_btn_wrap">
+											<span class="inner_btn">
+                                    <a href="javascript:void(0)" role="button" class="btn_comm btn_active" v-on:click="fn_send_email()">메일발송</a>
+                                </span>
+										</div>
+										<button type="button" class="btn_close"  v-on:click="isEmail = !isEmail">
+                                <span class="ico_common">닫기</span>
+                            </button>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li v-bind:class="{on: isShare}">
+							<!-- [개발]메일발송 레이어 활성화시 클래스 'on' 추가 -->
+							<a href="javascript:void(0)" class="btn_item" v-on:click="fn_menu_close('isShare')"
+								title="공유하기">
+								<span class="ico_common ico_share">공유하기</span>
+							</a>
+							<div class="layer_share">
+								<div class="common_active_layer">
+									<div class="layer_head head_type_line">
+										<strong class="tit_layer">공유하기</strong>
+									</div>
+									<div class="layer_body">
+										<ul class="common_list_sns">
+											<li>
+												<a href="javascript:shareLinkFaceBook()" class="link_sns">
+													<span class="ico_common ico_facebook">페이스북</span>
+												</a>
+											</li>
+											<li>
+												<a href="javascript:shareLinkTwitter()" class="link_sns">
+													<span class="ico_common ico_twitter">트위터</span>
+												</a>
+											</li>
+											<li>
+												<a href="javascript:shareLinkKakaostory()" class="link_sns">
+													<span class="ico_common ico_kstory">카카오스토리</span>
+												</a>
+											</li>
+											<li>
+												<a href="javascript:shareLinkClassting()" class="link_sns">
+													<span class="ico_common ico_classting">클래스팅</span>
+												</a>
+											</li>
+										</ul>
+									</div>
+									<div class="layer_foot">
+										<div class="common_ipt_wrap type_url">
+											<label for="iptUrl" class="hidden">링크 주소</label>
+											<input type="text" id="iptUrl" class="item_url" v-bind:value="get_link()" readonly="readonly"/>
+											<button type="button" class="btn_copy" v-on:click="fn_copy()" >복사</button>
+										</div>
+										<button type="button" class="btn_close"  v-on:click="isShare = !isShare">
+                                <span class="ico_common">닫기</span>
+                            </button>
+									</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div id="ct" class="ct_dev ct_dev_indigo" tabindex="-1">
+			<div class="inner_default">
+				<div class="cont_result">
+					<h3 class="tit_result"><span class="txt_inner">{{ testNm }} 결과표</span></h3>
+					<p class="txt_guide">직업가치관이란 직업을 선택할 때 영향을 끼치는 자신만의 믿음과 신념입니다. 따라서 여러분의 직업생활과 관련하여 포기하지 않는 무게중심의 역할을
+						한다고 볼 수 있습니다. 직업가치관검사는 여러분이 직업을 선택할 때 상대적으로 어떠한 가치를 중요하게 생각하는지를 알려줍니다. 또한 본인이 가장 중요하게 생각하는 가치를
+						충족시켜줄 수 있는 직업에 대해 생각해 볼 기회를 제공합니다.</p>
+
+					<!-- isMember , user:{name:'',gneder:'',school:'',grade:'',niceId:''} , inspct:{beginDtm:'',grade:'',sexdstn:''}-->
+					<div>
+						<table class="tbl_result">
+							<caption class="hidden">검사자 정보</caption>
+							<thead>
+								<tr>
+									<th scope="col">이름</th>
+									<th scope="col">성별</th>
+									<th scope="col">소속</th>
+									<th scope="col">
+										학년<span v-if="inspct.trgetSe =='100206' || inspct.trgetSe =='100207'">(나이)</span>
+									</th>
+									<th scope="col">나이스식별번호</th>
+									<th scope="col">검사일</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="ft_type2">
+									<td>{{get_name()}}</td>
+									<td>{{inspct.sexdstn == '100323' ? '남자':'여자'}}</td>
+									<td>{{inspct.schul == null ? '-' : inspct.schul}}</td>
+									<td>{{inspct.grade == null ? '-' : inspct.grade+'학년'}}<span v-if="inspct.trgetSe =='100206'">{{inspct.grade == null ? '' : '(' + (inspct.grade+13) + '세)'}}</span><span v-if="inspct.trgetSe =='100207'">{{inspct.grade == null ? '' : '(' + (inspct.grade+16) + '세)'}}</span>
+									</td>
+									<td>{{get_neis()}}</td>
+									<td>{{get_dtm(inspct.beginDtm)}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<strong class="tit_result_item">
+                    <span class="txt_tit">1. 직업가치관 결과</span>
+                </strong>
+					<p class="txt_guide">직업생활과 관련하여 {{user.name}}님은 {{reports[0].codeNm}}(와)과 {{reports[1].codeNm}}(을)를
+						가장 중요하게 생각합니다. <br/>반면에 {{reports[6].codeNm}}, {{reports[7].codeNm}}은 상대적으로 덜 중요하게 생각합니다.</p>
+						<div class="item_graph">
+							<span class="item_ctr" v-if="prev != null">
+                        <input type="checkbox" class="blind" id="inpCheck01" v-model="isPrev" v-on:click="prevBtn"/>
+                        <label class="lab_ctr" for="inpCheck01">이전검사 비교 보기</label>
+                    </span>
+							<div class="desc_date date_type2">
+								<span class="info_date date_before" v-if="prev != null">
+                            <span class="date_graph"></span>
+								<span class="emph_b">이전검사</span> ({{get_dtm(prev.endDtm)}})
+								</span>
+								<span class="info_date date_present">
+                            <span class="date_graph"></span>
+								<span class="emph_b">현재검사</span> ({{get_dtm(result.endDtm)}})
+								</span>
+							</div>
+						</div>
+						<div class="box_graph" style="margin-top:16px;">
+							<div>
+								<canvas id="chart" style="width:90%;margin-top:20px;"></canvas>
+							</div>
+						</div>
+						<div class="dsec_values">
+							<strong class="tit_values">각각의 가치관이 갖는 의미는 다음과 같습니다.</strong>
+							<div class="box_values values_ability">
+								<strong class="tit_box">능력발휘</strong>
+								<table class="tbl_values">
+									<caption>설명</caption>
+									<colgroup>
+										<col width="97" />
+									</colgroup>
+									<tbody>
+										<tr>
+											<th scope="row">특징</th>
+											<td>나의 능력을 충분히 발휘할 수 있을 때 보람과 만족을 느낍니다.</td>
+										</tr>
+										<tr>
+											<th scope="row">직업선택</th>
+											<td>나는 나의 능력을 충분히 발휘할 수 있는 기회와 가능성이 주어지는 직업을 선택할 것입니다.</td>
+										</tr>
+										<tr>
+											<th scope="row"> 직업생활</th>
+											<td> 직업생활에서의 경쟁은 나를 도전적으로 만들어주고, 어려운 일을 하나씩 해결해 나가는 과정에서 성취감을 느낄 것 입니다.</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="box_values values_free"><strong class="tit_box"> 자율성 </strong>
+								<table class="tbl_values">
+									<caption>설명</caption>
+									<colgroup>
+										<col width="97" />
+									</colgroup>
+									<tbody>
+										<tr>
+											<th scope="row"> 특징</th>
+											<td> 나는 어떤 일을 할 때 규칙, 절차, 시간 등을 스스로 결정하길 원합니다.</td>
+										</tr>
+										<tr>
+											<th scope="row"> 직업선택</th>
+											<td> 나는 다른 것보다 일하는 방식과 스타일이 자유로운 직업을 선택할 것입니다.</td>
+										</tr>
+										<tr>
+											<th scope="row"> 직업생활</th>
+											<td>나만의 방식에 맞게 자율적으로 일할 때 나의 능력을 더욱 효과적으로 발휘할 수 있습니다.</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="box_values values_pay"><strong class="tit_box"> 보수 </strong>
+								<table class="tbl_values">
+									<caption>설명</caption>
+									<colgroup>
+										<col width="97" />
+									</colgroup>
+									<tbody>
+										<tr>
+											<th scope="row"> 특징</th>
+											<td> 나의 충분한 경제적 보상이 매우 중요하다고 생각합니다.</td>
+										</tr>
+										<tr>
+											<th scope="row"> 직업선택</th>
+											<td> 나의 노력과 성과에 대해 충분한 경제적 보상이 주어지는 직업을 선택할 것입니다.</td>
+										</tr>
+										<tr>
+											<th scope="row"> 직업생활</th>
+											<td> 충분한 보수를 받는다면 일의 어려움과 힘겨움에 관계없이 최선을 다해 노력할 것입니다.</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="box_values values_stability"><strong class="tit_box"> 안정성 </strong>
+								<table class="tbl_values">
+									<caption>설명</caption>
+									<colgroup>
+										<col width="97" />
+									</colgroup>
+									<tbody>
+										<tr>
+											<th scope="row"> 특징</th>
+											<td> 나는 매사가 계획한대로 안정적으로 유지되는 것을 좋아합니다.</td>
+										</tr>
+										<tr>
+											<th scope="row"> 직업선택</th>
+											<td> 나는 쉽게 해고되지 않고 오랫동안 일할 수 있는 직업을 선택할 것입니다.</td>
+										</tr>
+										<tr>
+											<th scope="row"> 직업생활</th>
+											<td> 안정적인 직업생활이 보장된다면 편안한 마음으로 더욱 열심히 일을 할 것입니다.</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="box_values values_social"><strong class="tit_box"> 사회적인정 </strong>
+								<table class="tbl_values">
+									<caption>설명</caption>
+									<colgroup>
+										<col width="97" />
+									</colgroup>
+									<tbody>
+										<tr>
+											<th scope="row"> 특징</th>
+											<td> 나는 다른 사람들로부터 나의 능력과 성취를 충분히 인정받고 싶어합니다.</td>
+										</tr>
+										<tr>
+											<th scope="row"> 직업선택</th>
+											<td> 나는 많은 사람들로부터 주목받고 인정받을 수 있는 직업을 선택할 것입니다.</td>
+										</tr>
+										<tr>
+											<th scope="row"> 직업생활</th>
+											<td> 주변사람들이 나를 긍정적으로 평가하면 나의 능력발휘에 더욱 도움이 될 것입니다.</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="box_values values_social_service"><strong class="tit_box"> 사회봉사 </strong>
+								<table class="tbl_values">
+									<caption>설명</caption>
+									<colgroup>
+										<col width="97" />
+									</colgroup>
+									<tbody>
+										<tr>
+											<th scope="row"> 특징</th>
+											<td> 나는 다른 사람을 돕고 더 나은 세상을 만들고 싶습니다.</td>
+										</tr>
+										<tr>
+											<th scope="row"> 직업선택</th>
+											<td> 나는 사람, 조직, 국가, 인류에 대한 봉사와 기여가 가능한 직업을 선택할 것입니다.</td>
+										</tr>
+										<tr>
+											<th scope="row"> 직업생활</th>
+											<td> 도움과 격려가 필요한 사람들에게 힘을 줄 수 있는 직업생활을 할 때 가치와 보람을 느낄 것입니다.</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="box_values values_self"><strong class="tit_box">자기계발 </strong>
+								<table class="tbl_values">
+									<caption>설명</caption>
+									<colgroup>
+										<col width="97" />
+									</colgroup>
+									<tbody>
+										<tr>
+											<th scope="row"> 특징</th>
+											<td> 나는 항상 새로운 것을 배우고 스스로 발전해 나갈 때 만족을 느낍니다.</td>
+										</tr>
+										<tr>
+											<th scope="row"> 직업선택</th>
+											<td> 나는 나의 능력과 소질을 지속적으로 발전시킬 수 있는 직업을 선택할 것입니다.</td>
+										</tr>
+										<tr>
+											<th scope="row"> 직업생활</th>
+											<td> 나 스스로가 발전할 수 있는 기회가 충분히 주어지는 직업생활을 할 때 만족감을 느낄 것입니다.</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="box_values values_creativity"><strong class="tit_box"> 창의성 </strong>
+								<table class="tbl_values">
+									<caption>설명</caption>
+									<colgroup>
+										<col width="97" />
+									</colgroup>
+									<tbody>
+										<tr>
+											<th scope="row"> 특징</th>
+											<td> 나는 예전부터 해오던 것 보다는 새로운 것을 만들어 내는 것을 매우 좋아합니다.</td>
+										</tr>
+										<tr>
+											<th scope="row"> 직업선택</th>
+											<td> 나는 늘 변화하고 혁신적인 아이디어를 내며, 창조적인 시도를 하는 직업을 선택하고 싶습니다.</td>
+										</tr>
+										<tr>
+											<th scope="row"> 직업생활</th>
+											<td> 나는 새롭고 독창적인 것을 만들어 내는 과정에서 능력을 충분히 발휘할 수 있을 것입니다.</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+						<strong class="tit_result_item">
+                    <span class="txt_tit">2. {{isMember ? user.name + '님' : '나'}}의 가치관과 관련이 높은 직업</span>
+                </strong>
+						<p class="txt_guide">
+							<span class="emph_b">{{isMember ? user.name + '님이' : '내가'}}</span> 중요하게 생각하는
+							<span class="emph_b">{{reports[0].codeNm}}</span>(와)과
+							<span class="emph_b">{{reports[1].codeNm}}</span>을(를) 만족시킬 수 있는 직업은 다음과 같습니다.
+						</p>
+						<strong class="tit_bar">종사자 평균 학력별</strong>
+						<div class="guide_job" style="color:#f53f00;">· 직업명을 클릭하시면, 커리어넷 직업사전으로 이동하여 직업에 대한 더 자세한 정보를
+							확인할 수 있습니다.</div>
+						<table class="tbl_result">
+							<caption>검사 결과</caption>
+							<colgroup>
+								<col width="155" />
+							</colgroup>
+							<thead>
+								<tr>
+									<th scope="col">분야</th>
+									<th scope="col">직업명</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr v-for="grp in jobgrps">
+									<td>{{grp.cname}}</td>
+									<td style="text-align: left;padding-left: 7px;">
+										<a href="#none" v-for="(job, index) in grp.jobs"
+											v-bind:href="'http://www.career.go.kr/cnet/front/base/job/jobView.do?SEQ='+job.seq"
+											class="link_job" target="_blank">{{job.jobnm}}</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<strong class="tit_bar">종사자 평균 전공별</strong>
+						<div class="guide_job" style="color:#f53f00;">· 직업명을 클릭하시면, 커리어넷 직업사전으로 이동하여 직업에 대한 더 자세한 정보를
+							확인할 수 있습니다.</div>
+						<table class="tbl_result">
+							<caption>검사 결과</caption>
+							<colgroup>
+								<col width="155" />
+							</colgroup>
+							<thead>
+								<tr>
+									<th scope="col">분야</th>
+									<th scope="col">직업명</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr v-for="grp in jobgrps2" v-if="grp.cname != null">
+									<td>{{grp.cname}}</td>
+									<td style="text-align: left;padding-left: 7px;">
+										<a href="#none" v-for="(job, index) in grp.jobs"
+											v-bind:href="'http://www.career.go.kr/cnet/front/base/job/jobView.do?SEQ='+job.seq"
+											class="link_job" target="_blank">{{job.jobnm}}</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<strong class="tit_result_item">
+                    <span class="txt_tit">3. 직업가치관 활동 프로그램</span>
+                </strong>
+						<p class="txt_guide">
+							검사 후 활동 프로그램을 통해 직업가치관에 대해 한번 더 생각해보세요.
+						</p>
+						<div class="box_ctr">
+							<a href="#none" v-on:click="go_act(contextRoot+'web/psycho/value/act1')"
+								class="btn_ctr btn_connect" target="_blank">
+								활동1. 선호직업과 가치관 연결하기
+							</a>
+							<a href="#none" v-on:click="go_act(contextRoot+'web/psycho/value/act2')"
+								class="btn_ctr btn_card" target="_blank">
+								활동2. 직업가치관 카드 줄여보기
+							</a>
+						</div>
+						<strong class="tit_result_item">
+                    <span class="txt_tit">4. 직업가치관검사는 왜 필요한가요?</span>
+                </strong>
+						<div class="desc_necess">
+							<div class="guide_necess">
+								<strong class="tit_guide">첫째</strong> 직업가치관은 여러분의 직업선택의 중요한 기준이 됩니다. 흥미, 적성, 성격 등과 마찬가지로
+								판단의 기준이 될 수 있습니다.<br/> 따라서 자신의 직업가치관을 명확히 알고 있으면 직업선택에 도움이 됩니다.
+                    </div>
+								<div class="guide_necess necess2">
+									<strong class="tit_guide">둘째</strong> 나의 직업가치관을 충족시키는 직업을 가지면 만족도가 높아집니다.<br/> 여러 학자들에 따르면 자신의 직업가치가 충족되는 직업환경에서 근무할 때 높은 만족도를 경험한다고 합니다.
+                    </div>
+									<div class="guide_necess necess3">
+										<strong class="tit_guide">셋째</strong> 객관화된 검사를 통해 나의 직업가치관에 대해 더욱 잘 이해할 수 있게
+										됩니다.<br/> 또한 친구들과 검사결과를 비교해 봄으로서 나의 직업가치관이 갖는 의미에 대해 생각해볼 수 있습니다.
+                    </div>
+									</div>
+
+									<div class="pagebreaker"></div>
+									<div class="box_common_service printhide">
+										<strong class="tit_box">검사 후 이런 활동을 해보아요.</strong>
+										<ul class="list_service">
+											<li><a href="//www.career.go.kr/cnet/front/counsel/counselInfo.do?frontMenu=Y"
+													class="link_service service1" target="_blank">진로상담 받기</a></li>
+											<li><a href="//www.career.go.kr/cnet/front/counsel/counselList.do"
+													class="link_service service2" target="_blank">공개상담 살펴보기</a></li>
+											<li><a href="//www.career.go.kr/cnet/commonBiz/fileDownload.do?seq=ceada52181fe490dfdcd88571a66a4d4&amp;no=3afefac5dc4143e0459740d60441946b"
+													class="link_service service3" target="_blank">직업정보 전자책</a></li>
+											<li><a href="//www.career.go.kr/cnet/front/cosecch/cosecchSiteNewList.do"
+													class="link_service service4" target="_blank">진로교육
+													관련<br/>사이트 방문하기</a></li>
+										</ul>
+										<div class="item_box">
+											<strong class="tit_item">교사 및 학부모를 위한 정보</strong>
+											<div class="item_inner">
+												직업가치관검사 활용안내서와 검사 활용카드를 다운로드 받을 수 있습니다.
+												<a href="//www.career.go.kr/webres/examen/examen_guide.zip"
+													class="link_down"
+													target="_blank"><span class="hidden">다운로드</span></a>
+											</div>
+										</div>
+										<div class="item_box">
+											<strong class="tit_item">전국 17개 시도교육청의 홈페이지에 방문해보세요.</strong>
+											<div class="item_inner">
+												<q-select2 v-bind:options="edus" v-bind:selected.sync="edu"
+													placeholder="지역"></q-select2>
+												<a href="javascript:void(0)" class="btn_visit"
+													v-on:click="go_edu()">방문하기</a>
+											</div>
+										</div>
+										<div class="item_box">
+											<strong class="tit_item">우리 지역 진로교육센터를 찾아가보세요. 전문상담원들이 여러분을 기다리고 있어요.</strong>
+											<div class="item_inner">
+												<q-select2 v-bind:options="edcs" v-bind:selected.sync="edc"
+													placeholder="지역"></q-select2>
+												<a href="javascript:void(0)" class="btn_visit"
+													v-on:click="go_edc()">방문하기</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="box_bottom_service printhide">
+								<div class="wrap_more">
+									<span class="info_data" v-if="aroNo != null &amp;&amp; aroNo != '' &amp;&amp; !isPopup">
+			<a v-on:click="go_otherinspct()" class="link_more" target="_blank">다른검사 확인하기</a>
+		</span>
+									<span class="info_data" v-if="aroNo == null || aroNo == ''">
+            <a href="//www.career.go.kr/cnet/front/examen/inspctStd.do" class="link_more" target="_blank">심리검사목록으로 이동</a>
+            <a href="//www.career.go.kr/cnet" class="link_more" target="_blank">커리어넷 홈페이지로 이동</a>
+        </span>
+									<a href="#" class="link_top">TOP</a>
+								</div>
+							</div>
+						</div>
+						<div id="ft" class="printhide">
+							<div class="wrap_footer">
+								<div class="inner_footer">
+									<div class="ft_top">
+										문의사항이 있을 경우 커리어넷 이용문의를 이용해주세요.
+										<a href="//www.career.go.kr/cnet/front/commbbs/help/FcommBbsInsert.do"
+											class="link_qna">이용문의바로가기 ></a>
+									</div>
+									<dl class="desc_oper">
+										<dt>운영 :</dt>
+										<dd>한국직업능력연구원 국가진로교육연구본부 진로교육센터</dd>
+										<dt>지원 :</dt>
+										<dd>교육부</dd>
+									</dl>
+									<strong class="hidden">연구 및 서비스 분야</strong>
+									<div class="set_research">
+										<span class="info_research">진로지도 관련 정책 및 제도운영에 대한 연구</span>
+										<span class="info_research">직업·진로정보 생산보급</span>
+										<span class="info_research">직업 및 직업의 의식연구</span>
+									</div>
+									<div class="set_research">
+										<span class="info_research">직업안정정책 및 제도에 관한 연구</span>
+										<span class="info_research">직업·진로 관련 검사도구 및 프로그램 개발 및 보급</span>
+									</div>
+									<div class="set_research">
+										<span class="info_research">진로상담 및 교육 서비스</span>
+										<span class="info_research">진로관련 전문가 연수</span>
+									</div>
+									<em class="copyright">
+                COPYRIGHTS © KRIVET ALL RIGHTS RESERVED.
+            </em>
+									<div class="set_link">
+										<strong class="hidden">사이트 링크</strong>
+										<ul class="list_site">
+											<li>
+												<a href="http://www.moe.go.kr/main.do" target="_blank" title="새창 열림"
+													class="link_site site_edu">
+													<span class="ico_common">교육부</span>
+												</a>
+											</li>
+											<li>
+												<a href="http://www.krivet.re.kr/" target="_blank" title="새창 열림"
+													class="link_site site_krivet">
+													<span class="ico_common">한국직업능력연구원</span>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+				</div>
+				<form id="frmnext" name="frmnext" action="/inspct/web/psycho/aroplus" method="post">
+					<input id="aroNo" name="aroNo" type="hidden" value=""/>
+					<input id="encAroNo" name="encAroNo" type="hidden" value=""/>
+					<input id="seq" name="seq" type="hidden" value="55516293"/>
+</form>
+					<div id="divLoading" class="loader loader-default" data-text="생성중"></div>
+</body>
+
+<!-- 사용자 js -->
+
+<script src="/inspct/js/common/d3.min.js"></script>
+<script type="text/javascript">
+	/*<![CDATA[*/
+        var app = new Vue({
+            el: '#wrap',
+            data: {
+                inspctSeq:''
+                , contextRoot: contextRoot
+                , testNm:'직업가치관검사'
+                , user: {name:'비회원'}
+                , prev: {}
+                , result: {}
+                , inspct: {}
+                , mscl: []
+                , intrprts:[]
+                , reports:[{codeNm:''},{codeNm:''},{codeNm:''},{codeNm:''},{codeNm:''},{codeNm:''},{codeNm:''},{codeNm:''}]
+                ,isMenu:false
+                ,isMember : false
+                , aroNo: null
+                , isPopup: null
+                , jobgrps:[]
+                , jobgrps2:[]
+                , careers:['중졸이하','고졸','전문대졸','대졸','대학원졸']
+                , majors:['계열무관','인문','사회','교육','공학','자연','의학','예체능']
+                , prev: {}
+                , isPrev :false
+                , chart : null
+                , curChartData:[]
+                , prevChartData:[]
+                , chartData:{}
+
+                , email:''
+                , isEmail:false
+                , isShare:false
+                ,edus:[{ value:'http://www.sen.go.kr', text:'서울특별시'},{ value:'http://www.pen.go.kr', text:'부산광역시'},{ value:'http://www.dge.go.kr', text:'대구광역시'},{ value:'http://www.ice.go.kr', text:'인천광역시'},{ value:'http://www.gen.go.kr', text:'광주광역시'},{ value:'http://www.dje.go.kr', text:'대전광역시'},{ value:'http://www.use.go.kr', text:'울산광역시'},{ value:'http://www.sje.go.kr', text:'세종특별자치시'},
+                    { value:'http://www.goe.go.kr', text:'경기도'},{ value:'http://www.gwe.go.kr', text:'강원도'},{ value:'http://www.cbe.go.kr', text:'충청북도'},{ value:'http://www.cne.go.kr', text:'충청남도'},{ value:'http://www.jbe.go.kr', text:'전라북도'},{ value:'http://www.jne.go.kr', text:'전라남도'},{ value:'http://www.gbe.kr', text:'경상북도'},{ value:'http://www.gne.go.kr', text:'경상남도'},{ value:'http://www.jje.go.kr', text:'제주특별자치도'}]
+                ,edcs:[{text:'서울특별시',value:'https://www.jinhak.or.kr/index.do'},{text:'부산광역시',value:'https://dream.pen.go.kr/center/'},{text:'대구광역시',value:'http://www.dge.go.kr/jinhak/main.do'},{text:'인천광역시',value:'http://www.ice.go.kr/main.do?s=jinhak'},{text:'광주광역시',value:'http://jinhak.gen.go.kr/'},{text:'대전광역시',value:'http://www.edurang.net/main.do?s=course'},{text:'울산광역시',value:'https://jinhak.use.go.kr/'},{text:'세종특별자치시',value:'http://career.sje.go.kr/index.do?sso=ok'},{text:'경기도',value:'https://jinhak.goedu.kr/'},{text:'강원도',value:'https://jinro.gwe.go.kr/'},{text:'충청북도',value:'http://jinro.cbe.go.kr/home/main.php'},{text:'충청남도',value:'http://career.edus.or.kr/main.do?s=career'},{text:'전라북도',value:'http://jinro.jbe.go.kr/main/main.jbe'},{text:'전라남도',value:'http://jdream.jne.go.kr/'},{text:'경상북도',value:'http://jinhak.gbe.kr/'},{text:'경상남도',value:'http://www.gne.go.kr/jinro/index.gne'},{text:'제주특별자치도',value:'http://www.jje.go.kr/jinro/index.jje'}]
+                ,edc:''
+                ,edu:''
+               	, getSh_Link:'http://www.career.go.kr/cnet/front/examen/inspctMain.do'
+                , getSh_Title:'커리어넷'
+            },
+            methods: {
+                get_dtm:function(dtm){ return moment(dtm).format("YYYY.MM.DD");}
+                ,get_rjobs:function(mscl) {
+                    for(var i = 0; i < this.rjobs.length ;i++) {
+                        if(this.rjobs[i].msclNo == mscl) return this.rjobs[i].list;
+                    }
+                    return [];
+                }
+                ,get_responsestatus:function(){
+                    var f = 0 , l = 0  , msg = [
+                        ["응답 패턴, 응답 시간에 이상이 없습니다.","응답 시간이 지나치게 짧아 재검사를 요청했습니다."]
+                        ,["응답 패턴이 이상이 있어 재검사를 요청했습니다.","응답 시간, 패턴에 이상이 있어 재검사를 요청했습니다."]
+                    ];
+                    if(moment(this.inspct.endDtm).diff(moment(this.inspct.beginDtm)) < 2*60*1000) f = 1;
+                    // 응답 분석
+                    var temp = String(this.inspct.answers);
+                    var anss = temp.split(' ');
+                    var atbl = [];
+                    for(var i = 0 ; i < anss.length ; i++) {
+                        var ans = anss[i].split('=');
+                        if(atbl[ans[1]] == null) atbl[ans[1]] = 0;
+                        atbl[ans[1]] += 1;
+                    }
+                    for(var i = 0 ; i < atbl.length ; i++) {
+                        if(atbl[i] > 19) {
+                            l = 1;
+                            break;
+                        }
+                    }
+                    return msg[f][l];
+                }
+                ,go_edu:function(){ if(this.edu != '') window.open(this.edu,""); }
+                ,go_edc:function(){ if(this.edc != '') window.open(this.edc,""); }
+                ,prevBtn:function(){
+                    this. drawGraph();
+                }
+                ,drawGraph :function() {
+
+                    if(app.prev != null && app.prev != '' && app.isPrev) {
+                        app.chartData = {
+                            labels: app.mscl.map(function(item) {return item['codeNm'];})
+                            , datasets: [
+                                { backgroundColor: "rgba(186, 208, 219, 0.75)", data: [this.mscl[0].pwScore,this.mscl[1].pwScore,this.mscl[2].pwScore,this.mscl[3].pwScore,this.mscl[4].pwScore,this.mscl[5].pwScore,this.mscl[6].pwScore,this.mscl[7].pwScore]}
+                                ,{backgroundColor: "rgba(252, 174, 73, 0.75)", data: [this.mscl[0].wScore,this.mscl[1].wScore,this.mscl[2].wScore,this.mscl[3].wScore,this.mscl[4].wScore,this.mscl[5].wScore,this.mscl[6].wScore,this.mscl[7].wScore]}
+                            ]
+                        };
+                    } else {
+                        app.chartData = {
+                            labels: app.mscl.map(function(item) {return item['codeNm'];})
+                            , datasets: [{backgroundColor: "rgba(252, 174, 73, 0.75)", data: [
+                                app.mscl[0].wScore ,app.mscl[1].wScore, app.mscl[2].wScore, app.mscl[3].wScore,app.mscl[4].wScore,app.mscl[5].wScore,app.mscl[6].wScore,app.mscl[7].wScore]}]
+                        };
+                    }
+                    if(app.chart != null) app.chart.destroy();
+                    app.chart = new Chart('chart', { type: 'bar', data: this.chartData
+                        , options: {
+                            legend: {display: false},responsive: true, maintainAspectRatio: true
+                            ,plugins: {
+                                datalabels: {
+                                    color: function(context) {
+                                        if(app.isPrev) {
+                                            if(context.datasetIndex == 1) {
+                                                if(app.mscl[context.dataIndex].rank == 1 ) {
+                                                    return '#269bed';
+                                                } else if( app.mscl[context.dataIndex].rank == 2) {
+                                                    return '#269bed';
+                                                }
+                                            }
+                                        } else {
+                                            if(context.datasetIndex == 0) {
+                                                if(app.mscl[context.dataIndex].rank == 1 ) {
+                                                    return '#269bed';
+                                                } else if( app.mscl[context.dataIndex].rank == 2) {
+                                                    return '#269bed';
+                                                }
+                                            }
+                                        }
+                                        return '#333';
+                                    }
+                                    ,padding: 4
+                                    ,font: {
+                                        size: 12
+                                        ,weight: 'bold'
+                                    }
+                                    ,align: function(context) {
+                                        return 'top';
+                                    }
+                                    ,anchor: function(context) {
+                                        return 'end';
+                                    }
+                                    ,formatter: function(value, context) {
+                                        if(app.isPrev) {
+                                            if(context.datasetIndex == 1) {
+                                                if(app.mscl[context.dataIndex].rank == 1 ) {
+                                                    return '★★ ' + value;
+                                                } else if( app.mscl[context.dataIndex].rank == 2) {
+                                                    return '★ ' + value;
+                                                }
+                                                return value;
+                                            }
+                                        } else {
+                                            if(context.datasetIndex == 0) {
+                                                if(app.mscl[context.dataIndex].rank == 1 ) {
+                                                    return '★★ ' + value;
+                                                } else if( app.mscl[context.dataIndex].rank == 2) {
+                                                    return '★ ' + value;
+                                                }
+                                                return value;
+                                            }
+                                        }
+                                        return '';
+                                    }
+                                }
+                            }
+                            , scales: { yAxes: [ {
+                                    ticks: {
+                                        beginAtZero:true
+                                        , max : 10
+                                        ,stepSize : 1
+                                        ,callback: function(tickValue, index, ticks) {return '';}
+                                    }
+                                }]
+                            }
+                        }
+                    });
+                }
+                ,fn_send_email:function(){
+                    var rex = /^[\w.%+\-]+@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+                    if(rex.test(this.user.email) == false) {
+                        swal('이메일을 입력해주세요.');
+                        return false;
+                    }
+                    var param = {
+                        mailCd:'03',
+                        toId: this.inspct.id != null ? this.inspct.id : '비회원',
+                        toName:this.get_name(),
+                        toEmail:this.user.email,
+                        fromEmail:'webmaster@career.go.kr',
+                        fromName:'커리어넷',
+                        Subject:'[커리어넷]'+this.get_name()+'님의 '+this.testNm+' 결과입니다.',
+                        mapLong: window.location.href
+                    };
+                    axios.post("/api/psycho/sendmail",param).then(function (response) {
+                        swal('메일이 발송 되었습니다.');
+                        app.isEmail = false;
+                    });
+                }
+                , get_name: function () {
+                    if (this.user.name != null) return this.user.name;
+                    else if (this.inspct != null && this.inspct.name != null) return this.inspct.name;
+                    return '비회원';
+                }
+                , get_neis: function () {
+                    if (this.inspct != null && this.inspct.id != null && this.inspct.id.length> 2) return this.inspct.id.substring(2);
+                    return '-';
+                }
+                , get_gender: function () {
+                    if (this.inspct != null && this.inspct.sexdstn == '100324') return '여자';
+                    else if (this.inspct != null && this.inspct.sexdstn == '100323') return '남자';
+                    else if (this.user.gender == '100324') return '여자';
+                    else if (this.user.gender == '100323') return '남자';
+                    return '-';
+                }
+                , get_grade: function () {
+                    if (this.inspct != null) {
+                        if (this.inspct.trgetSe == 100206 && this.inspct.grade != null) {
+                            return this.inspct.grade + '학년 (' + (parseInt(this.inspct.grade) + 13) + '세)';
+                        } else if (this.inspct.trgetSe == 100207 && this.inspct.grade != null) {
+                            return this.inspct.grade + '학년 (' + (parseInt(this.inspct.grade) + 16) + '세)';
+                        }
+                    }
+                    return '-';
+                }
+                , get_schul: function () {
+                    if (this.user.schul != null) return this.user.schul;
+                    else if (this.inspct != null && this.inspct.schul != null) return this.inspct.schul;
+                    return '-';
+                }
+                , get_enddtm: function () {
+                    if (this.inspct != null && this.inspct.endDtm != null) return this.get_dtm(this.inspct.endDtm);
+                    return '-';
+                }
+                , get_careerid: function () {
+                    if (this.user.id != null) return this.user.id;
+                    return '-';
+                }
+                , fn_pdftxt:function() {
+                    var memo = '';
+                    if (this.responseScore == 0) return memo;
+                    // 사용자
+                    memo += this.get_name() + '|*|' + this.get_gender() + '|*|' + this.get_schul() + '|*|' + this.get_grade() + '|*|' + this.get_neis() + '|*|' + this.get_enddtm() + '|*|' + this.get_careerid() + '|*||@|';
+                    // 3. 표
+                    /*
+                    337|*|능력발휘|*|N|*|Y|*|27|#|
+                    362|*|자율성|*|Y|*|N|*|29|#|
+                    150|*|보수|*|N|*|N|*|12|#|
+                    175|*|안정성|*|N|*|N|*|14|#|
+                    150|*|사회적 인정|*|N|*|N|*|12|#|
+                    212|*|사회봉사|*|N|*|N|*|17|#|
+                    62|*|자기계발|*|N|*|N|*|5|#|
+                    50|*|창의성|*|N|*|N|*|4|@|
+                    * */
+                    for(var i = 0 ; i < this.mscl.length ; i++) {
+                        if(i > 0) {
+                            memo += "|#|";
+                        }
+                        var star1 = 'N', star2 = 'N';
+                        if(this.reports[0].mscl == this.mscl[i].mscl) star1 = 'Y';
+                        if(this.reports[1].mscl == this.mscl[i].mscl) star2 = 'Y';
+                        memo += '150|*|' + this.mscl[i].codeNm + '|*|' + star1 + '|*|' + star2 + '|*|' + this.mscl[i].wScore ;
+                    }
+                    memo += "|@|";
+                    // 4.
+                    memo += this.get_name() + '|*|' + this.reports[0].codeNm + '|*|' + this.reports[1].codeNm+ '|*|' + this.reports[2].codeNm+ '|*|' + this.reports[3].codeNm + '|@|';
+                    // 5
+                    memo += '능력발휘|*|나의 능력을 충분히 발휘할 수 있을 때 보람과 만족을 느낍니다.|*|나는 나의 능력을 충분히 발휘할 수 있는 기회와 가능성이 주어지는 직업을 선택할 것입니다.|*|직업생활에서의 경쟁은 나를 도전적으로 만들어주고, 어려운 일을 하나씩 해결해 나가는 과정에서 성취감을 느낄 것 입니다.|*||#|';
+                    memo += '자율성|*|나는 어떤 일을 할 때 규칙, 절차, 시간 등을 스스로 결정하길 원합니다.|*|나는 다른 것보다 일하는 방식과 스타일이 자유로운 직업을 선택할 것입니다.|*|나만의 방식에 맞게 자율적으로 일할 때 나의 능력을 더욱 효과적으로 발휘할 수 있습니다.|*||#|';
+                    memo += '보수|*|나의 충분한 경제적 보상이 매우 중요하다고 생각합니다.|*|나의 노력과 성과에 대해 충분한 경제적 보상이 주어지는 직업을 선택할 것입니다.|*|충분한 보수를 받는다면 일의 어려움과 힘겨움에 관계없이 최선을 다해 노력할 것입니다.|*||#|';
+                    memo += '안정성|*|나는 매사가 계획한대로 안정적으로 유지되는 것을 좋아합니다.|*|나는 쉽게 해고되지 않고 오랫동안 일할 수 있는 직업을 선택할 것입니다.|*|안정적인 직업생활이 보장된다면 편안한 마음으로 더욱 열심히 일을 할 것입니다.|*||#|';
+                    memo += '사회적인정|*|나는 다른 사람들로부터 나의 능력과 성취를 충분히 인정받고 싶어합니다.|*|나는 많은 사람들로부터 주목받고 인정받을 수 있는 직업을 선택할 것입니다.|*|주변사람들이 나를 긍정적으로 평가하면 나의 능력발휘에 더욱 도움이 될 것입니다.|*||#|';
+                    memo += '사회봉사|*|나는 다른 사람을 돕고 더 나은 세상을 만들고 싶습니다.|*|나는 사람, 조직, 국가, 인류에 대한 봉사와 기여가 가능한 직업을 선택할 것입니다.|*|도움과 격려가 필요한 사람들에게 힘을 줄 수 있는 직업생활을 할 때 가치와 보람을 느낄 것입니다.|*||#|';
+                    memo += '자기계발|*|나는 항상 새로운 것을 배우고 스스로 발전해 나갈 때 만족을 느낍니다.|*|나는 나의 능력과 소질을 지속적으로 발전시킬 수 있는 직업을 선택할 것입니다.|*|나 스스로가 발전할 수 있는 기회가 충분히 주어지는 직업생활을 할 때 만족감을 느낄 것입니다.|*||#|';
+                    memo += '창의성|*|나는 예전부터 해오던 것 보다는 새로운 것을 만들어 내는 것을 매우 좋아합니다.|*|나는 늘 변화하고 혁신적인 아이디어를 내며, 창조적인 시도를 하는 직업을 선택하고 싶습니다.|*|나는 새롭고 독창적인 것을 만들어 내는 과정에서 능력을 충분히 발휘할 수 있을 것입니다.|*||#|';
+                    memo += "|@|";
+                    // 3. 가치지향
+                    for(var i = 0 ; i < this.jobgrps.length ; i++){
+                        if(i > 0) { memo += "|#|";}
+                        var tjobs = '';
+                        for(var m = 0 ; m < this.jobgrps[i].jobs.length ; m++) {
+                            if(m > 0) { tjobs += ", ";}
+                            tjobs += this.jobgrps[i].jobs[m].jobnm;
+                        }
+                        memo += this.jobgrps[i].cname + '|*|' + tjobs + '|*|' + this.reports[0].codeNm + '|*|' + this.reports[1].codeNm + '|*|';
+                    }
+                    memo += "|@|";
+                    // 7
+                    for(var i = 0 ; i < this.jobgrps2.length ; i++){
+                        if(i > 0) { memo += "|#|";}
+                        var tjobs = '';
+                        for(var m = 0 ; m < this.jobgrps2[i].jobs.length ; m++) {
+                            if(m > 0) { tjobs += ", ";}
+                            tjobs += this.jobgrps2[i].jobs[m].jobnm;
+                        }
+                        memo += this.jobgrps2[i].cname + '|*|' + tjobs + '|*|';
+                    }
+                    memo += "|@|";
+
+                    return memo;
+                }
+                , fn_download: function () {
+                    document.querySelector("#divLoading").classList.add("is-active");
+                    setTimeout(function () {
+                        var memo = app.fn_pdftxt();
+                        axios({
+                            url: '/api/psycho/pdf',
+                            method: 'POST',
+                            responseType: 'blob',
+                            data: {crf: 'new/valueResult.crf', memo: memo}
+                        }).then(function (res) {
+                            var url = window.URL.createObjectURL(new Blob([res.data]));
+                            var filename = 'value' + moment().format("YYYYMMDDHH") + '.pdf'
+                            if (window.navigator && window.navigator.msSaveOrOpenBlob) { // for IE
+                                window.navigator.msSaveOrOpenBlob(res.data, filename);
+                            } else {
+                                const link = document.createElement('a');
+                                link.href = url;
+                                link.setAttribute('download', filename);
+                                document.body.appendChild(link);
+                                link.click();
+                                link.remove();
+                            }
+                            document.querySelector("#divLoading").classList.remove("is-active");
+                        });
+                    }, 2000);
+                }
+                ,fn_copy:function () {
+                    var copyText = document.getElementById("iptUrl");
+                    copyText.select();
+                    document.execCommand("Copy");
+                    swal('복사되었습니다.');
+                }
+                ,get_link:function(){
+                    return window.location.href;
+                }
+
+                ,get_cmt2:function (score) {
+                    if(score < 30) return '하';
+                    else if(score < 70) return '중';
+                    else return '상';
+                }
+                ,get_mscl:function (no) {
+                    for(var i = 0 ; i < this.reports.length ; i++) {
+                        if(this.reports[i].seq == no) return this.reports[i];
+                    }
+                    return null;
+                }
+                ,go_act:function (url) {
+                    if(this.isMember) {
+                        window.open(url + '?seq=' + this.user.mbrNo, '_blank', 'width=970, height=900, scrollbars=yes');
+                    } else {
+                        swal('로그인한 사용자만 가능한 검사입니다.');
+                    }
+                }
+                ,fn_menu_close:function (args) {
+                	if(args == 'isEmail'){
+                		app.isEmail = !app.isEmail;
+                		if(app.isEmail == true && app.isShare == true){
+                			app.isShare = !app.isShare;
+                		}
+                	}else if(args == 'isShare'){
+                		app.isShare = !app.isShare;
+						if(app.isShare == true && app.isEmail == true){
+							app.isEmail = !app.isEmail;
+						}
+                	}
+                	if(app.isMenu == true){
+                		app.isEmail = false;
+                		app.isShare = false;
+                	}
+                }
+                , go_otherinspct: function(){
+                    document.getElementById("frmnext").submit();
+                }, get_name: function () {
+                    if (this.user.name != null) return this.user.name;
+                    else if (this.inspct != null && this.inspct.name != null) return this.inspct.name;
+                    return '비회원';
+                }
+                , get_neis: function () {
+                    if (this.inspct != null && this.inspct.id != null && this.inspct.id.length> 2) return this.inspct.id.substring(2);
+                    return '-';
+                }
+            },
+            computed: {}
+        });
+        app.$nextTick(function () {
+        	app.isPopup = urlParams['popup'] != null;
+            app.inspctSeq = urlParams["seq"];
+            app.aroNo = document.getElementById("aroNo").value;
+            if(app.aroNo == '' || app.aroNo == null || app.aroNo == 'null' || app.aroNo == undefined || app.aroNo == 'dW5kZWZpbmVk' || app.aroNo == 'bnVsbA==') {
+                app.aroNo = urlParams["arono"];
+                if(app.aroNo == '' || app.aroNo == null || app.aroNo == 'null'  || app.aroNo == undefined || app.aroNo == 'dW5kZWZpbmVk' || app.aroNo == 'bnVsbA==') {
+                    app.aroNo = null;
+                }
+            }
+            axios.get("/api/psycho/report?seq="+app.inspctSeq).then(function (response) {
+                if(response.data != null && response.data != '') {
+                    app.inspct = response.data.inspct;
+                    if(app.inspct != null) {
+                        if(app.inspct.id != null) {
+                            if(Number(app.inspct.id) > 2000000000) {
+                                app.inspct.neis = "" + (Number(app.inspct.id) - 2000000000);
+                            } else {
+                                app.inspct.neis = "" + (Number(app.inspct.id) - 1000000000);
+                            }
+                        } else {
+                            app.inspct.neis = "-";
+                        }
+                    }
+                    if(response.data.user != null) app.user = response.data.user;
+                    app.user.email = app.inspct.email;
+                    app.result = response.data.result;
+                    app.prev = response.data.prev;
+                    if(app.prev == null) app.isPrev = false;
+                    if(app.inspct.id > 0) {
+                        app.isMember = true;
+                    } else {
+                        swal({html:"비회원은 "+ app.testNm +" 결과를 재확인 할 수 없습니다. <br />결과표를 다운로드 해주세요.",showCancelButton: true,confirmButtonText: '결과표 다운로드',cancelButtonText: '닫기'}).then(function(result){
+                            if(result.value){
+                                app.fn_download();
+                            }
+                        });
+                    }
+                    axios.get("/api/psycho/intrprts?qestnrseq="+ app.inspct.qestnrSeq).then(function (response) {
+                        app.intrprts = response.data;
+                        var arrNm = ["능력발휘", "자율성", "보수", "안정성", "사회적 인정", "사회봉사", "자기계발", "창의성"];
+                        var wt = String(app.result.wonScore).split(" ");
+                        var pwt ;
+                        if(app.prev != null) {
+                            pwt = String(app.prev.wonScore).split(" ");
+                        }
+                        for(var i = 0 ; i < app.intrprts.length ; i++) {
+                            var bFind = false;
+                            for(var m = 0 ; m < wt.length ; m++) {
+                                var ws = wt[m].split("=");
+                                if(i + 1 == parseInt(ws[0]).toFixed(0)) {
+                                    bFind = true;
+                                    app.intrprts[i].wScore = parseInt(ws[1]).toFixed(0);
+                                }
+                            }
+                            if(bFind == false) {
+                                app.intrprts[i].wScore = 0;
+                            }
+                            if(app.prev != null) {
+                                bFind = false;
+                                for(var m = 0 ; m < pwt.length ; m++) {
+                                    var ws = pwt[m].split("=");
+                                    if(i + 1 == parseInt(ws[0]).toFixed(0)) {
+                                        bFind = true;
+                                        app.intrprts[i].pwScore = parseInt(ws[1]).toFixed(0);
+                                    }
+                                }
+                                if(bFind == false) {
+                                    app.intrprts[i].pwScore = 0;
+                                }
+                            }
+                            app.intrprts[i].codeNm = arrNm[i];
+                            app.intrprts[i].no = i + 1;
+                            app.intrprts[i].idx = i;
+                            app.reports[i] = clone(app.intrprts[i]);
+                        }
+                        app.mscl = clone(app.reports)
+                        app.reports.sort(function(a,b){
+                            if(a.wScore == b.wScore) {
+                                var arr = [1,6,2,5,4,8,3,7];
+                                if(app.inspct.trgetSe == '100206') {
+                                    if(app.inspct.grade == 1) {
+                                        arr = [2,5,4,6,3,8,1,7];
+                                    } else if(app.inspct.grade == 2) {
+                                        arr = [1,6,2,5,4,8,3,7];
+                                    } else {
+                                        arr = [1, 6,2,4,5,8,3,7];
+                                    }
+                                } else {
+                                    if(app.inspct.grade == 1) {
+                                        arr = [1,6,2,4,5,8,3,7];
+                                    }
+                                }
+                                return arr[a.idx] - arr[b.idx]  ;
+                            }
+                            return b.wScore - a.wScore;
+                        });
+                        // 랭킹
+                        var rank = 1;
+                        for(var m = 0 ; m < app.reports.length ; m++) {
+                            for(var i = 0 ; i < app.mscl.length ; i++) {
+                                if(app.mscl[i].seq == app.reports[m].seq) {
+                                    app.mscl[i].rank = rank;
+                                    rank += 1;
+                                }
+                            }
+                        }
+                        // 종사자 평균 학력별 직업
+                        axios.get("/api/psycho/value/jobs?no1="+app.reports[0].no+"&no2="+app.reports[1].no).then(function (response) {
+                            app.jobgrps = [];
+                            for(var i= 0 ; i < response.data.length ; i++) {
+                                var item = response.data[i];
+                                if(app.jobgrps[item[2]] == null) app.jobgrps[item[2]] = {cno:item[2] , cname : app.careers[item[2]-1] , jobs : []};
+                                app.jobgrps[item[2]].jobs[app.jobgrps[item[2]].jobs.length] = { seq : item[0] , jobnm : item[1]};
+                            }
+                            app.jobgrps.clean(null);
+                        });
+                        // 종사자 평균 전공별 직업
+                        axios.get("/api/psycho/value/majors?no1="+app.reports[0].no+"&no2="+app.reports[1].no).then(function (response) {
+                            app.jobgrps2 = [];
+                            var arr = [];
+                            for(var i= 0 ; i < response.data.length ; i++) {
+                                var item = response.data[i];
+                                if(app.jobgrps2[item[2]] == null) app.jobgrps2[item[2]] = {cno:item[2] , cname : app.majors[item[2]] , jobs : []};
+                                app.jobgrps2[item[2]].jobs[app.jobgrps2[item[2]].jobs.length] = { seq : item[0] , jobnm : item[1]};
+                                arr[arr.length] =  { seq : item[0] , jobnm : item[1]};
+                            }
+                            arr = arr.slice().sort(function(a,b){
+                                if( a.jobnm > b.jobnm ) return 1 ;
+                                if( b.jobnm > a.jobnm ) return -1;
+                                return 0;
+                            }).reduce(function(a,b){if (a.slice(-1)[0] !== b) a.push(b);return a;},[]);
+                            if(app.jobgrps2[0] == null) {
+                                app.jobgrps2[0] = {cno:0 , cname : '계열무관' , jobs : []};
+                            }
+                            app.jobgrps2[0].jobs = arr;
+                            app.jobgrps2.clean(null);
+                        });
+                        setTimeout(function(){app.drawGraph();},1000);
+
+                    });
+                }
+            });
+        });
+        function menuHoverClass(element) {
+		    element.classList.toggle('on');
+		}
+        /*]]>*/
+</script>
+
+</html>
