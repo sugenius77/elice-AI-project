@@ -59,65 +59,40 @@ export function TestSample() {
       </p>
       <div className={styles.questionBox}>
         <p className={styles.question}>{question.question}</p>
-        <div
-          class="btn-group col-10 mx-auto"
-          role="group"
-          aria-label="Basic radio toggle button group"
-        >
+        <div className={styles.switchField}>
           <input
             type="radio"
+            id="radio-one"
+            name="switch-one"
             value="ans01"
-            class="btn-check "
-            name="btnradio"
-            id="btnradio1"
-            autocomplete="off"
             checked={ans === "ans01"}
             onChange={onHandleChangeAns}
           />
-          <label
-            class="btn btn-outline-success"
-            for="btnradio1"
-            style={{
-              fontWeight: "bold",
-              fontSize: "20px",
-              fontFamily: "Hahmlet",
-              textAlign: "center",
-            }}
-          >
-            {question.answer01}
-
+          <label for="radio-one">
+            {" "}
+            <span>{question.answer01}</span>
             <br></br>
-            {question.answer04}
+            {question.answer03}
           </label>
-
           <input
             type="radio"
+            id="radio-two"
+            name="switch-one"
             value="ans02"
-            class="btn-check"
-            name="btnradio"
-            id="btnradio2"
-            autocomplete="off"
             checked={ans === "ans02"}
             onChange={onHandleChangeAns}
           />
-          <label
-            class="btn btn-outline-success"
-            for="btnradio2"
-            style={{
-              fontWeight: "bold",
-              fontSize: "19px",
-              fontFamily: "Hahmlet",
-            }}
-          >
-            {question.answer02}
+          <label for="radio-two">
+            <span>{question.answer02}</span>
             <br></br>
             {question.answer04}
           </label>
         </div>
       </div>
+
       <div class="d-grid gap-2 col-6 mx-auto">
         <button
-          class="btn btn-outline-dark"
+          class="btn btn-outline-info"
           style={{ fontFamily: "Nanum Gothic", fontWeight: "bold" }}
           onClick={() => {
             history.push({ pathname: "/test", state: state });

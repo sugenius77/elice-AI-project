@@ -296,7 +296,7 @@ export function ResultPage() {
           <YAxis />
           <Tooltip />
           <Legend />
-          <Bar dataKey={"value"} fill="#82ca9d " />
+          <Bar dataKey={"value"} fill="#f16f49" />
         </BarChart>
       </p>
       <h3 className={styles.jobs}>
@@ -649,20 +649,23 @@ export function ResultPage() {
           <td className={styles.jobsTd}>{major.artSports}</td>
         </tr>
       </table>
-      <div class="d-grid gap-2 col-6 mx-auto">
-        <button
-          class="btn btn-outline-dark"
-          style={{
-            fontFamily: "Nanum Gothic",
-            fontWeight: "bold",
-            marginRight: "80px",
-          }}
-          onClick={() => {
-            window.location.href = "/";
-          }}
-        >
-          다시 검사하기
-        </button>
+      <div style={{ marginRight: "-124px" }}>
+        <div class="d-grid gap-2 col-6 mx-auto">
+          <button
+            class="btn btn-outline-dark"
+            style={{
+              fontFamily: "Nanum Gothic",
+              fontWeight: "bold",
+
+              marginRight: "80px",
+            }}
+            onClick={() => {
+              window.location.href = "/";
+            }}
+          >
+            다시 검사하기
+          </button>
+        </div>
       </div>
     </div>
   );

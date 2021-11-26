@@ -75,7 +75,7 @@ export function TestPage() {
   }
 
   // 콘솔에 찍어서 확인
-  console.log(sortedKeys);
+  console.log(result);
   console.log(resultArray.join(" "));
 
   return (
@@ -94,7 +94,7 @@ export function TestPage() {
         }}
       >
         <div
-          class="progress-bar progress-bar-striped bg-success  progress-bar-animated"
+          class="progress-bar progress-bar-striped bg-info  progress-bar-animated"
           role="progressbar"
           aria-valuenow="0"
           aria-valuemin="0"
@@ -110,14 +110,9 @@ export function TestPage() {
                 <p className={styles.question}>
                   Q{obj.qitemNo}. {obj.question}
                 </p>
-                <div
-                  class="btn-group col-10 mx-auto"
-                  role="group"
-                  aria-label="Basic radio toggle button group"
-                >
+                <div className={styles.switchField}>
                   <input
                     type="radio"
-                    class="btn-check"
                     id={`danger-outlined-${obj.qitemNo}-L`}
                     autocomplete="off"
                     value={obj.answerScore01}
@@ -129,23 +124,13 @@ export function TestPage() {
                       });
                     }}
                   />
-                  <label
-                    class="btn btn-outline-success"
-                    for={`danger-outlined-${obj.qitemNo}-L`}
-                    style={{
-                      fontWeight: "bold",
-                      fontSize: "20px",
-                      fontFamily: "Hahmlet",
-                      textAlign: "center",
-                    }}
-                  >
-                    {obj.answer01}
+                  <label for={`danger-outlined-${obj.qitemNo}-L`}>
+                    <span>{obj.answer01}</span>
                     <br></br>
-                    {obj.answer04}
+                    {obj.answer03}
                   </label>
                   <input
                     type="radio"
-                    class="btn-check"
                     id={`success-outlined-${obj.qitemNo}-R`}
                     autocomplete="off"
                     value={obj.answerScore02}
@@ -157,16 +142,8 @@ export function TestPage() {
                       });
                     }}
                   />
-                  <label
-                    class="btn btn-outline-success"
-                    for={`success-outlined-${obj.qitemNo}-R`}
-                    style={{
-                      fontWeight: "bold",
-                      fontSize: "19px",
-                      fontFamily: "Hahmlet",
-                    }}
-                  >
-                    {obj.answer02}
+                  <label for={`success-outlined-${obj.qitemNo}-R`}>
+                    <span>{obj.answer02}</span>
                     <br></br>
                     {obj.answer04}
                   </label>

@@ -19,7 +19,7 @@ export function UserPage() {
 
   return (
     <div className={styles.box}>
-      <h1>직업가치관검사</h1>
+      <img style={{ width: "330px" }} alt="main" src="/img/main.png" />
       <form
         onSubmit={(e) => {
           e.preventDefault();
