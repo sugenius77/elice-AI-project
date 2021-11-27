@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useHistory } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 import styles from "./style.module.css";
 
@@ -81,6 +81,7 @@ export function ResultPage() {
         }
       );
       let urlSeq = postData.data.RESULT.url.split("?")[1];
+      // 검사결과와 유저 정보를 post요청하면 돌아오는 데이터 중 url의 seq 부분 따로 저장
       if (postData.data) {
         const getData = await axios.get(
           "https://www.career.go.kr/inspct/api/psycho/report?" + urlSeq
@@ -94,9 +95,9 @@ export function ResultPage() {
             };
           }
         });
-        console.log(getData.data.result.wonScore);
         setChart(obj);
       }
+      // obj에 1번 점수, 2번 점수들이 오브젝트 형태로 들어감
       let sortobj = [];
       for (let number in obj) {
         sortobj.push([number, obj[number]]);
@@ -104,14 +105,9 @@ export function ResultPage() {
       sortobj.sort(function (a, b) {
         return b[1] - a[1];
       });
-      console.log(obj);
-      console.log(sortobj);
-      console.log(sortobj[0][0]);
-      console.log(sortobj[1][0]);
-
       let number1 = sortobj[0][0];
       let number2 = sortobj[1][0];
-
+      // 점수를 sort해서 가장 높은 1위 2위 따로 저장
       const getEdu = await axios.get(
         "https://inspct.career.go.kr/inspct/api/psycho/value/jobs?no1=" +
           number1 +
@@ -125,7 +121,7 @@ export function ResultPage() {
           "&no2=" +
           number2
       );
-
+      // 1위, 2위를 기준으로 학력별, 전공별 직업 데이터 받아오기
       for (let i = 0; i < getEdu.data.length; i++) {
         if (getEdu.data[i][2] === 2) {
           high.push(getEdu.data[i][1] + "\u00a0");
@@ -143,6 +139,7 @@ export function ResultPage() {
         universe: universe,
         graduate: graduate,
       });
+      // 고졸, 전문대졸 등 학력별로 저장
       for (let i = 0; i < getMajor.data.length; i++) {
         if (getMajor.data[i][2] === 0) {
           all.push(getMajor.data[i][1] + "\u00a0");
@@ -172,7 +169,7 @@ export function ResultPage() {
         medical: medical,
         artSports: artSports,
       });
-      console.log(edu);
+      // 데이터들을 전공별로 저장
     } catch (error) {
       console.log(error);
     }
@@ -180,52 +177,50 @@ export function ResultPage() {
   useEffect(() => {
     getResult();
   }, []);
-  ////////////////// 그냥 확인 값
-  console.log(chart);
-  ///////////////////
+
   const chartData = [
     {
       name: "능력발휘",
-      value: chart[1],
+      score: chart[1],
       number: "1",
     },
     {
       name: "자율성",
-      value: chart[2],
+      score: chart[2],
       number: "2",
     },
     {
       name: "보수",
-      value: chart[3],
+      score: chart[3],
       number: "3",
     },
     {
       name: "안전성",
-      value: chart[4],
+      score: chart[4],
       number: "4",
     },
     {
       name: "사회적 인정",
-      value: chart[5],
+      score: chart[5],
       number: "5",
     },
     {
       name: "사회봉사",
-      value: chart[6],
+      score: chart[6],
       number: "6",
     },
     {
       name: "자기계발",
-      value: chart[7],
+      score: chart[7],
       number: "7",
     },
     {
       name: "창의성",
-      value: chart[8],
+      score: chart[8],
       number: "8",
     },
   ];
-
+  // 가치관 이름으로 맵핑해주기
   let sortrank = [];
   for (let number in chart) {
     sortrank.push([number, chart[number]]);
@@ -233,7 +228,7 @@ export function ResultPage() {
   sortrank.sort(function (a, b) {
     return b[1] - a[1];
   });
-
+  // 가치관들의 점수를 오름차순으로 정렬
   for (let i = 0; i < sortrank.length; i++) {
     if (sortrank[0][0] === chartData[i].number) {
       one.push(chartData[i].name);
@@ -245,10 +240,10 @@ export function ResultPage() {
       eight.push(chartData[i].name);
     }
   }
-
+  // 1,2,7,8위 가치관 따로 저장하기
   return (
     <div className={styles.contents}>
-      <h1 className={styles.resultTitle}>직업가치관검사 결과표</h1>
+      <h1 className={styles.resultTitle}>직업 가치관 검사 결과표</h1>
       <hr />
       <div className={styles.valueDescription}>
         직업가치관이란 직업을 선택할 때 영향을 끼치는 자신만의 믿음과
@@ -281,9 +276,9 @@ export function ResultPage() {
           {one}, {two}
         </span>
         를(을) 가장 중요하게 생각합니다. <br></br>반면에{" "}
-        <spans style={{ fontWeight: "bold" }}>
+        <span style={{ fontWeight: "bold" }}>
           {seven}, {eight}
-        </spans>
+        </span>
         은(는) 상대적으로 덜 중요하게 생각합니다.
       </p>
       <p className={styles.chart}>
@@ -296,7 +291,7 @@ export function ResultPage() {
           <YAxis />
           <Tooltip />
           <Legend />
-          <Bar dataKey={"value"} fill="#f16f49" />
+          <Bar dataKey={"score"} fill="#f16f49" />
         </BarChart>
       </p>
       <h3 className={styles.jobs}>
@@ -547,7 +542,7 @@ export function ResultPage() {
         </table>
       </div>
 
-      <strong strong className={styles.number2}>
+      <strong className={styles.number2}>
         2. 나의 가치관과 관련이 높은 직업
       </strong>
       <h3 className={styles.jobs}>종사자 평균 학력별</h3>
@@ -650,9 +645,9 @@ export function ResultPage() {
         </tr>
       </table>
       <div style={{ marginRight: "-124px" }}>
-        <div class="d-grid gap-2 col-6 mx-auto">
+        <div className="d-grid gap-2 col-6 mx-auto">
           <button
-            class="btn btn-outline-dark"
+            className="btn btn-outline-dark"
             style={{
               fontFamily: "Nanum Gothic",
               fontWeight: "bold",

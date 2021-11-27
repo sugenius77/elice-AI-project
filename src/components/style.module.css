@@ -72,7 +72,7 @@ div {
 .questionBox {
   width: 90%;
   height: 90%;
-  background-color: #f7f7f7;
+  background-color: #f8f8f8;
   border: 2px solid #2f3438;
   margin: 0 auto;
   padding-top: 50px;
@@ -121,6 +121,7 @@ div {
   bottom: 60px;
   right: 40px;
 }
+
 /* 검사 완료 안내 */
 .endBox {
   text-align: center;
@@ -169,7 +170,7 @@ table {
 th {
   font-size: 20px;
   border: 1px solid #2f3438;
-  background-color: #8aa6af;
+  background-color: #f1f1f1;
   color: #2f3438;
 }
 td {
@@ -252,7 +253,7 @@ td {
 .jobsTh {
   font-family: "Hahmlet", sans-serif;
   font-size: 24px;
-  background-color: #d6dbe4;
+  background-color: #f2f4f6;
   font-weight: bold;
 }
 .jobsTd {
@@ -276,18 +277,16 @@ td {
 
 .switchField label {
   background-color: white;
-  color: rgb(53, 197, 240);
+  color: #2f3438;
   font-family: "Hahmlet", sans-serif;
   font-size: 19px;
-  font-weight: bold;
   line-height: 1.4;
   text-align: center;
   padding: 10px 50px;
   margin-left: -3px;
-  border: 2px solid rgb(53, 197, 240);
+  border: 2px solid #2f3438;
   border-collapse: collapse;
   position: relative;
-  transition: all 0.1s ease-in-out;
   width: 48%;
 }
 
@@ -295,10 +294,16 @@ td {
   cursor: pointer;
 }
 
+.switchField input:checked + label > span {
+  background-color: rgb(53, 197, 240);
+  color: white;
+  box-shadow: none;
+}
+
 .switchField input:checked + label {
-  background-color: #2f3438;
+  background-color: rgb(53, 197, 240);
   border: 2px solid #2f3438;
-  color: rgb(53, 197, 240);
+  color: white;
   box-shadow: none;
 }
 
@@ -310,6 +315,13 @@ td {
   border-radius: 0 4px 4px 0;
 }
 .switchField span {
-  color: rgb(53, 197, 240);
+  color: #2f3438;
   font-size: 25px;
+  font-weight: bold;
 }
+/* .switchField span:checked + label {
+  background-color: rgb(53, 197, 240);
+  border: 2px solid #2f3438;
+  color: white;
+  box-shadow: none;
+} */

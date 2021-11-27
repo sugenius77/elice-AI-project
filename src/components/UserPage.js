@@ -61,11 +61,11 @@ export function UserPage() {
           여자 <br></br>
         </p>
       </form>
-      <div class="d-grid gap-2 col-6 mx-auto">
+      <div className="d-grid gap-2 col-6 mx-auto">
         <button
           type="button"
           style={{ fontFamily: "Nanum Gothic", fontWeight: "bold" }}
-          class="btn btn-outline-dark"
+          className="btn btn-outline-dark"
           onClick={() => {
             const regex = /^[ㄱ-ㅎ|가-힣|a-z|A-Z]+$/;
             // 숫자, 특수문자 제외,, 한글이랑 영어만 가능

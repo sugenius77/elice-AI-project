@@ -13,7 +13,7 @@ export function TestEnd() {
         볼 기회를 제공합니다.
       </p>
       <button
-        class="btn btn-outline-info"
+        className="btn btn-outline-dark"
         style={{
           fontFamily: "Nanum Gothic",
           fontWeight: "bold",

@@ -37,14 +37,14 @@ export function TestSample() {
       <h1 className={styles.sampleTitle}>검사예시</h1>
       <span className={styles.fakepercent}>0%</span>
       <div
-        class="progress"
+        className="progress"
         style={{
           width: "90%",
           margin: "0 auto",
         }}
       >
         <div
-          class="progress-bar progress-bar-striped"
+          className="progress-bar progress-bar-striped"
           role="progressbar"
           aria-valuenow="0"
           aria-valuemin="0"
@@ -90,9 +90,9 @@ export function TestSample() {
         </div>
       </div>
 
-      <div class="d-grid gap-2 col-6 mx-auto">
+      <div className="d-grid gap-2 col-6 mx-auto">
         <button
-          class="btn btn-outline-info"
+          className="btn btn-outline-dark"
           style={{ fontFamily: "Nanum Gothic", fontWeight: "bold" }}
           onClick={() => {
             history.push({ pathname: "/test", state: state });
