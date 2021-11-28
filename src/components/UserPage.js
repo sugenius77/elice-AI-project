@@ -16,7 +16,6 @@ export function UserPage() {
       setUser({ ...user, gender: targetValue });
     }
   };
-
   return (
     <div className={styles.box}>
       <img style={{ width: "330px" }} alt="main" src="/img/main.png" />
