@@ -15,8 +15,8 @@ import {
 
 export function ResultPage() {
   const { state } = useLocation();
-  let startDtm = +new Date(); // 밀리터리세컨드로 표현된 현재 시간
-  let answers = state.result.join(" "); // 결과값
+  let startDtm = +new Date();
+  let answers = state.result.join(" ");
   const [chart, setChart] = useState([]);
 
   let one = [];
@@ -39,13 +39,13 @@ export function ResultPage() {
     medical: "",
     artSports: "",
   });
-  /// 날짜 포맷 변경
+
   var today = new Date();
   var year = today.getFullYear();
   var month = ("0" + (today.getMonth() + 1)).slice(-2);
   var day = ("0" + today.getDate()).slice(-2);
   var dateString = year + "-" + month + "-" + day;
-  ///
+
   let obj = {};
   let high = [];
   let junior = [];
@@ -81,7 +81,6 @@ export function ResultPage() {
         }
       );
       let urlSeq = postData.data.RESULT.url.split("?")[1];
-      // 검사결과와 유저 정보를 post요청하면 돌아오는 데이터 중 url의 seq 부분 따로 저장
       if (postData.data) {
         const getData = await axios.get(
           "https://www.career.go.kr/inspct/api/psycho/report?" + urlSeq
@@ -97,7 +96,6 @@ export function ResultPage() {
         });
         setChart(obj);
       }
-      // obj에 1번 점수, 2번 점수들이 오브젝트 형태로 들어감
       let sortobj = [];
       for (let number in obj) {
         sortobj.push([number, obj[number]]);
@@ -107,7 +105,6 @@ export function ResultPage() {
       });
       let number1 = sortobj[0][0];
       let number2 = sortobj[1][0];
-      // 점수를 sort해서 가장 높은 1위 2위 따로 저장
       const getEdu = await axios.get(
         "https://inspct.career.go.kr/inspct/api/psycho/value/jobs?no1=" +
           number1 +
@@ -121,7 +118,6 @@ export function ResultPage() {
           "&no2=" +
           number2
       );
-      // 1위, 2위를 기준으로 학력별, 전공별 직업 데이터 받아오기
       for (let i = 0; i < getEdu.data.length; i++) {
         if (getEdu.data[i][2] === 2) {
           high.push(getEdu.data[i][1] + "\u00a0");
@@ -139,7 +135,6 @@ export function ResultPage() {
         universe: universe,
         graduate: graduate,
       });
-      // 고졸, 전문대졸 등 학력별로 저장
       for (let i = 0; i < getMajor.data.length; i++) {
         if (getMajor.data[i][2] === 0) {
           all.push(getMajor.data[i][1] + "\u00a0");
@@ -169,7 +164,6 @@ export function ResultPage() {
         medical: medical,
         artSports: artSports,
       });
-      // 데이터들을 전공별로 저장
     } catch (error) {
       console.log(error);
     }
@@ -220,7 +214,6 @@ export function ResultPage() {
       number: "8",
     },
   ];
-  // 가치관 이름으로 맵핑해주기
   let sortrank = [];
   for (let number in chart) {
     sortrank.push([number, chart[number]]);
@@ -228,7 +221,6 @@ export function ResultPage() {
   sortrank.sort(function (a, b) {
     return b[1] - a[1];
   });
-  // 가치관들의 점수를 오름차순으로 정렬
   for (let i = 0; i < sortrank.length; i++) {
     if (sortrank[0][0] === chartData[i].number) {
       one.push(chartData[i].name);
@@ -240,7 +232,6 @@ export function ResultPage() {
       eight.push(chartData[i].name);
     }
   }
-  // 1,2,7,8위 가치관 따로 저장하기
   return (
     <div className={styles.contents}>
       <h1 className={styles.resultTitle}>직업 가치관 검사 결과표</h1>

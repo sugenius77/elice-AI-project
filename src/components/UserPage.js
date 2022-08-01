@@ -4,7 +4,6 @@ import styles from "./style.module.css";
 export function UserPage() {
   const history = useHistory();
   const [user, setUser] = useState({ name: "", gender: "" });
-  // user에 value 값 넣기
   const onHandleChange = (e) => {
     let targetName = e.target.name;
     let targetValue = e.target.value;
